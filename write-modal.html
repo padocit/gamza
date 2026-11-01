@@ -1,0 +1,250 @@
+<!-- ========================================================
+     감자(Gamza) 마켓 - 화면 3: 상품 등록(글쓰기) 모달 템플릿
+     ======================================================== -->
+
+<div id="gamzaWriteModal" class="gamza-write-modal-overlay" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="gamzaWriteModalTitle">
+  <div class="gamza-write-modal-container">
+    
+    <!-- 모달 상단 헤더 -->
+    <header class="gamza-write-modal-header">
+      <div class="gamza-write-header-title-wrap">
+        <span class="gamza-write-potato-badge">🥔</span>
+        <div>
+          <h2 id="gamzaWriteModalTitle" class="gamza-write-title">내 물건 팔기</h2>
+          <p class="gamza-write-subtitle">동네 이웃과 나눌 상품의 정보를 입력해 주세요</p>
+        </div>
+      </div>
+      <!-- 닫기 [✕] 버튼 -->
+      <button type="button" class="gamza-write-close-btn" id="gamzaWriteModalCloseBtn" aria-label="글쓰기 모달 닫기" title="닫기">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="18" y1="6" x2="6" y2="18"></line>
+          <line x1="6" y1="6" x2="18" y2="18"></line>
+        </svg>
+      </button>
+    </header>
+
+    <!-- 스크롤 가능 폼 본문 영역 -->
+    <div class="gamza-write-scrollable">
+      <form id="gamzaWriteForm" class="gamza-write-form" novalidate>
+        
+        <!-- 1. 상품 이미지 업로드 & 샘플 선택 -->
+        <div class="gamza-form-group" id="group-image">
+          <div class="gamza-label-row">
+            <label class="gamza-form-label">상품 이미지 <span class="gamza-required">*</span></label>
+            <span class="gamza-label-tip">직접 업로드하거나 아래 샘플을 선택하세요</span>
+          </div>
+
+          <!-- 드래그 & 클릭 업로드 드롭존 -->
+          <div class="gamza-upload-dropzone" id="gamzaUploadDropzone">
+            <input type="file" id="gamzaProductImageInput" class="gamza-file-input" accept="image/png, image/jpeg, image/webp, image/gif" />
+            
+            <div class="gamza-dropzone-content" id="gamzaDropzonePrompt">
+              <div class="gamza-camera-icon">
+                <svg viewBox="0 0 24 24" width="32" height="32" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path>
+                  <circle cx="12" cy="13" r="4"></circle>
+                </svg>
+              </div>
+              <p class="gamza-dropzone-title">이미지 파일 드래그 또는 <span class="gamza-highlight">PC에서 찾기</span></p>
+              <p class="gamza-dropzone-desc">JPG, PNG, WEBP 권장 (1장 등록)</p>
+            </div>
+
+            <!-- 이미지 미리보기 박스 (이미지 로드 시 표시) -->
+            <div class="gamza-image-preview-wrapper" id="gamzaImagePreviewWrapper" style="display: none;">
+              <img id="gamzaImagePreview" class="gamza-image-preview" src="" alt="상품 미리보기" />
+              <button type="button" class="gamza-image-remove-btn" id="gamzaImageRemoveBtn" title="이미지 삭제">
+                <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                  <line x1="18" y1="6" x2="6" y2="18"></line>
+                  <line x1="6" y1="6" x2="18" y2="18"></line>
+                </svg>
+              </button>
+              <div class="gamza-preview-tag">미리보기</div>
+            </div>
+          </div>
+
+          <!-- 기본 추천 샘플 이미지 팔레트 -->
+          <div class="gamza-sample-palette">
+            <span class="gamza-sample-palette-label">💡 추천 샘플 사진:</span>
+            <div class="gamza-sample-chips" id="gamzaSampleChips">
+              <button type="button" class="gamza-sample-chip" data-img="https://images.unsplash.com/photo-1517336714731-489689fd1ca8?w=600&auto=format&fit=crop&q=80">
+                <img src="https://images.unsplash.com/photo-1517336714731-489689fd1ca8?w=100&auto=format&fit=crop&q=80" alt="맥북 샘플" />
+                <span>디지털</span>
+              </button>
+              <button type="button" class="gamza-sample-chip" data-img="https://images.unsplash.com/photo-1530018607912-eff2daa1bac4?w=600&auto=format&fit=crop&q=80">
+                <img src="https://images.unsplash.com/photo-1530018607912-eff2daa1bac4?w=100&auto=format&fit=crop&q=80" alt="원목식탁 샘플" />
+                <span>가구</span>
+              </button>
+              <button type="button" class="gamza-sample-chip" data-img="https://images.unsplash.com/photo-1551028719-00167b16eac5?w=600&auto=format&fit=crop&q=80">
+                <img src="https://images.unsplash.com/photo-1551028719-00167b16eac5?w=100&auto=format&fit=crop&q=80" alt="의류 플리스 샘플" />
+                <span>의류</span>
+              </button>
+              <button type="button" class="gamza-sample-chip" data-img="https://images.unsplash.com/photo-1517668808822-9ebb02f2a0e6?w=600&auto=format&fit=crop&q=80">
+                <img src="https://images.unsplash.com/photo-1517668808822-9ebb02f2a0e6?w=100&auto=format&fit=crop&q=80" alt="커피머신 샘플" />
+                <span>가전</span>
+              </button>
+              <button type="button" class="gamza-sample-chip" data-img="https://images.unsplash.com/photo-1512820790803-83ca734da794?w=600&auto=format&fit=crop&q=80">
+                <img src="https://images.unsplash.com/photo-1512820790803-83ca734da794?w=100&auto=format&fit=crop&q=80" alt="도서 샘플" />
+                <span>도서</span>
+              </button>
+            </div>
+          </div>
+          <p class="gamza-form-error" id="error-image">상품 이미지를 등록하거나 샘플을 선택해주세요.</p>
+        </div>
+
+        <!-- 2. 상품명 (제목) -->
+        <div class="gamza-form-group" id="group-title">
+          <div class="gamza-label-row">
+            <label for="gamzaProductTitle" class="gamza-form-label">상품명 <span class="gamza-required">*</span></label>
+            <span class="gamza-char-counter"><span id="gamzaTitleCounter">0</span>/50</span>
+          </div>
+          <input
+            type="text"
+            id="gamzaProductTitle"
+            class="gamza-form-input"
+            placeholder="상품명을 입력해주세요 (예: 맥북 에어 M2 스페이스 그레이)"
+            maxlength="50"
+            autocomplete="off"
+            required
+          />
+          <p class="gamza-form-error" id="error-title">상품명을 2자 이상 입력해주세요.</p>
+        </div>
+
+        <!-- 3. 카테고리 -->
+        <div class="gamza-form-group" id="group-category">
+          <label for="gamzaProductCategory" class="gamza-form-label">카테고리 <span class="gamza-required">*</span></label>
+          <div class="gamza-select-wrapper">
+            <select id="gamzaProductCategory" class="gamza-form-select" required>
+              <option value="" disabled selected>카테고리를 선택해주세요</option>
+              <option value="디지털기기">디지털기기</option>
+              <option value="가구/인테리어">가구/인테리어</option>
+              <option value="의류">의류</option>
+              <option value="생활가전">생활가전</option>
+              <option value="도서/티켓">도서/티켓</option>
+              <option value="기타">기타</option>
+            </select>
+            <span class="gamza-select-arrow">
+              <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="6 9 12 15 18 9"></polyline>
+              </svg>
+            </span>
+          </div>
+          <p class="gamza-form-error" id="error-category">카테고리를 선택해주세요.</p>
+        </div>
+
+        <!-- 4. 가격 & 무료나눔 -->
+        <div class="gamza-form-group" id="group-price">
+          <div class="gamza-label-row">
+            <label for="gamzaProductPrice" class="gamza-form-label">판매 가격 <span class="gamza-required">*</span></label>
+            <label class="gamza-checkbox-label">
+              <input type="checkbox" id="gamzaPriceFreeCheck" class="gamza-checkbox" />
+              <span class="gamza-checkbox-custom"></span>
+              <span class="gamza-checkbox-text">무료 나눔 🥔</span>
+            </label>
+          </div>
+
+          <div class="gamza-price-input-wrapper">
+            <span class="gamza-price-symbol">₩</span>
+            <input
+              type="text"
+              id="gamzaProductPrice"
+              class="gamza-form-input gamza-price-input"
+              placeholder="가격을 입력해주세요 (예: 150000)"
+              inputmode="numeric"
+              autocomplete="off"
+              required
+            />
+            <span class="gamza-price-unit">원</span>
+          </div>
+          <p class="gamza-price-preview" id="gamzaPricePreview" style="display: none;">
+            한글 금액: <strong id="gamzaPriceKorean">0원</strong>
+          </p>
+          <p class="gamza-form-error" id="error-price">올바른 가격을 입력해주세요.</p>
+        </div>
+
+        <!-- 5. 거래 희망 동네 -->
+        <div class="gamza-form-group" id="group-location">
+          <div class="gamza-label-row">
+            <label for="gamzaProductLocation" class="gamza-form-label">거래 희망 동네 <span class="gamza-required">*</span></label>
+            <span class="gamza-label-tip">동네를 클릭하면 자동 입력됩니다</span>
+          </div>
+          <input
+            type="text"
+            id="gamzaProductLocation"
+            class="gamza-form-input"
+            placeholder="동네 이름을 입력해주세요 (예: 역삼동, 서초동)"
+            autocomplete="off"
+            required
+          />
+          <!-- 빠른 동네 선택 칩 -->
+          <div class="gamza-location-chips" id="gamzaLocationChips">
+            <button type="button" class="gamza-location-chip" data-loc="서울 강남구 역삼동">역삼동</button>
+            <button type="button" class="gamza-location-chip" data-loc="서울 서초구 반포동">반포동</button>
+            <button type="button" class="gamza-location-chip" data-loc="서울 마포구 연남동">연남동</button>
+            <button type="button" class="gamza-location-chip" data-loc="서울 송파구 잠실동">잠실동</button>
+            <button type="button" class="gamza-location-chip" data-loc="경기 성남시 분당구 정자동">정자동</button>
+            <button type="button" class="gamza-location-chip" data-loc="서울 영등포구 여의도동">여의도동</button>
+          </div>
+          <p class="gamza-form-error" id="error-location">거래 희망 동네를 입력해주세요.</p>
+        </div>
+
+        <!-- 6. 판매 상태 (기본값: 판매중) -->
+        <div class="gamza-form-group" id="group-status">
+          <label class="gamza-form-label">판매 상태</label>
+          <div class="gamza-status-selector">
+            <label class="gamza-status-option status-option-selling">
+              <input type="radio" name="gamzaProductStatus" value="selling" checked />
+              <span class="gamza-status-card">
+                <span class="gamza-status-dot dot-selling"></span>
+                <span class="gamza-status-text">판매중</span>
+              </span>
+            </label>
+
+            <label class="gamza-status-option status-option-reserved">
+              <input type="radio" name="gamzaProductStatus" value="reserved" />
+              <span class="gamza-status-card">
+                <span class="gamza-status-dot dot-reserved"></span>
+                <span class="gamza-status-text">예약중</span>
+              </span>
+            </label>
+
+            <label class="gamza-status-option status-option-completed">
+              <input type="radio" name="gamzaProductStatus" value="completed" />
+              <span class="gamza-status-card">
+                <span class="gamza-status-dot dot-completed"></span>
+                <span class="gamza-status-text">거래 완료</span>
+              </span>
+            </label>
+          </div>
+        </div>
+
+        <!-- 7. 자세한 설명 -->
+        <div class="gamza-form-group" id="group-description">
+          <div class="gamza-label-row">
+            <label for="gamzaProductDesc" class="gamza-form-label">자세한 설명 <span class="gamza-required">*</span></label>
+            <span class="gamza-char-counter"><span id="gamzaDescCounter">0</span>/500</span>
+          </div>
+          <textarea
+            id="gamzaProductDesc"
+            class="gamza-form-textarea"
+            rows="5"
+            placeholder="상품의 상태, 구매 시기, 하자 유무, 거래 선호 장소 등을 솔직하고 자세하게 적어주세요. 가품이나 판매금지 물품은 게시가 제한될 수 있습니다."
+            maxlength="500"
+            required
+          ></textarea>
+          <p class="gamza-form-error" id="error-description">자세한 설명을 5자 이상 작성해주세요.</p>
+        </div>
+
+      </form>
+    </div>
+
+    <!-- 하단 액션 버튼 바 -->
+    <footer class="gamza-write-modal-footer">
+      <button type="button" class="gamza-btn-cancel" id="gamzaWriteCancelBtn">취소</button>
+      <button type="button" class="gamza-btn-submit" id="gamzaWriteSubmitBtn">
+        <span class="gamza-submit-icon">🥔</span>
+        <span>감자 등록 완료</span>
+      </button>
+    </footer>
+
+  </div>
+</div>

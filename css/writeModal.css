@@ -1,0 +1,1018 @@
+/* ==========================================================================
+   감자 마켓 - 화면 3: 글쓰기 모달 스타일 (writeModal.css)
+   디자인 토큰: SEED Design System (https://seed-design.io/foundations/color)
+   ========================================================================== */
+
+/* --- 1. 모달 오버레이 & 백드롭 --- */
+.gamza-write-modal-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--seed-color-bg-overlay, rgba(0, 0, 0, 0.45));
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity var(--transition-smooth, 0.3s cubic-bezier(0.4, 0, 0.2, 1));
+}
+
+.gamza-write-modal-overlay.is-active {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+/* --- 2. 모달 컨테이너 (SEED Low Density Centered: Max-width 720px) --- */
+.gamza-write-modal-container {
+  position: relative;
+  width: 92%;
+  max-width: var(--seed-layout-dialog-low-max-width, 720px);
+  max-height: 90vh;
+  background-color: var(--color-card-bg, #FFFFFF);
+  border-radius: var(--radius-lg, 16px);
+  border: 1px solid var(--color-border, #eeeff1);
+  box-shadow: 0 20px 48px rgba(0, 0, 0, 0.16), 0 8px 16px rgba(0, 0, 0, 0.06);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  transform: translateY(20px) scale(0.97);
+  transition: transform var(--transition-smooth, 0.3s cubic-bezier(0.4, 0, 0.2, 1));
+}
+
+.gamza-write-modal-overlay.is-active .gamza-write-modal-container {
+  transform: translateY(0) scale(1);
+}
+
+/* --- 3. 모달 헤더 (SEED 24px 내부 여백 체계) --- */
+.gamza-write-modal-header {
+  padding: 20px 24px;
+  background: #FFFFFF;
+  border-bottom: 1px solid var(--color-border, #eeeff1);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-shrink: 0;
+}
+
+.gamza-write-header-title-wrap {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.gamza-write-potato-badge {
+  font-size: 1.8rem;
+  line-height: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  background-color: var(--color-point-light, #fff2ec);
+  border: 1.5px solid var(--color-point-border, #ffd5c0);
+  border-radius: var(--radius-md, 12px);
+  box-shadow: var(--shadow-sm, 0 1px 3px rgba(0, 0, 0, 0.05));
+}
+
+.gamza-write-title {
+  font-size: var(--seed-font-size-t7, 1.25rem);
+  line-height: var(--seed-line-height-t7, 1.6875rem);
+  font-weight: var(--seed-font-weight-bold, 700);
+  color: var(--color-text-main, #1a1c20);
+}
+
+.gamza-write-subtitle {
+  font-size: var(--seed-font-size-t3, 0.8125rem);
+  line-height: var(--seed-line-height-t3, 1.125rem);
+  color: var(--color-text-sub, #555d6d);
+  margin-top: 2px;
+}
+
+.gamza-write-close-btn,
+.gamza-write-modal-close {
+  width: 38px;
+  height: 38px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-text-muted, #868b94);
+  background-color: transparent;
+  border: 1px solid transparent;
+  border-radius: var(--radius-full, 9999px);
+  cursor: pointer;
+  transition: transform var(--seed-duration-pressed-scale, 150ms) var(--seed-timing-feedback, cubic-bezier(0.2, 0, 0, 1)),
+              background-color var(--seed-duration-color-transition, 150ms) var(--seed-timing-feedback, cubic-bezier(0.2, 0, 0, 1)),
+              color var(--seed-duration-color-transition, 150ms) var(--seed-timing-feedback, cubic-bezier(0.2, 0, 0, 1));
+}
+
+.gamza-write-close-btn:hover,
+.gamza-write-modal-close:hover {
+  color: var(--color-text-main, #1a1c20);
+  background-color: var(--seed-gray-200, #f3f4f5);
+  transform: rotate(90deg);
+}
+
+.gamza-write-close-btn:active,
+.gamza-write-modal-close:active {
+  transform: scale(var(--seed-scale-pressed-icon, 0.938));
+  background-color: var(--seed-color-bg-neutral-weak-pressed, #eeeff1);
+}
+
+/* --- 4. 스크롤 폼 영역 (SEED 24px 내부 여백 체계) --- */
+.gamza-write-scrollable {
+  flex: 1 1 auto;
+  overflow-y: auto;
+  padding: 24px;
+  background-color: #FFFFFF;
+  scrollbar-width: thin;
+  scrollbar-color: var(--seed-gray-400, #dcdee3) transparent;
+}
+
+.gamza-write-scrollable::-webkit-scrollbar {
+  width: 6px;
+}
+
+.gamza-write-scrollable::-webkit-scrollbar-thumb {
+  background-color: var(--seed-gray-400, #dcdee3);
+  border-radius: 999px;
+}
+
+/* --- 5. 폼 그룹 & 레이블 --- */
+.gamza-write-form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.gamza-form-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.gamza-label-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 7px;
+  gap: 8px;
+}
+
+.gamza-form-label {
+  font-size: var(--seed-font-size-t4, 0.875rem);
+  line-height: var(--seed-line-height-t4, 1.1875rem);
+  font-weight: var(--seed-font-weight-bold, 700);
+  color: var(--color-text-main, #1a1c20);
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.gamza-required {
+  color: var(--seed-color-fg-critical, #fa342c);
+  font-weight: 700;
+}
+
+.gamza-label-tip {
+  font-size: var(--seed-font-size-t2, 0.75rem);
+  line-height: var(--seed-line-height-t2, 1rem);
+  color: var(--color-text-muted, #868b94);
+}
+
+.gamza-char-counter {
+  font-size: var(--seed-font-size-t2, 0.75rem);
+  line-height: var(--seed-line-height-t2, 1rem);
+  color: var(--color-text-muted, #868b94);
+  font-variant-numeric: tabular-nums;
+}
+
+/* --- 6. 입력 인풋 & 셀렉트 & 텍스트에어리어 공통 --- */
+.gamza-form-input,
+.gamza-form-select,
+.gamza-form-textarea {
+  width: 100%;
+  padding: 12px 14px;
+  font-size: var(--seed-font-size-t5, 1rem);
+  line-height: var(--seed-line-height-t5, 1.375rem);
+  font-weight: var(--seed-font-weight-regular, 400);
+  font-family: inherit;
+  color: var(--color-text-main, #1a1c20);
+  background-color: var(--seed-gray-100, #f7f8f9);
+  border: 1.5px solid var(--color-border, #eeeff1);
+  border-radius: var(--radius-md, 12px);
+  outline: none;
+  transition: all var(--transition-fast, 0.2s);
+}
+
+.gamza-form-input::placeholder,
+.gamza-form-textarea::placeholder {
+  color: var(--color-text-muted, #868b94);
+  font-size: var(--seed-font-size-t4, 0.875rem);
+}
+
+.gamza-form-input:focus,
+.gamza-form-select:focus,
+.gamza-form-textarea:focus {
+  background-color: #FFFFFF;
+  border-color: var(--color-point, #ff6600);
+  box-shadow: 0 0 0 3.5px rgba(255, 102, 0, 0.18);
+}
+
+.gamza-form-input.is-invalid,
+.gamza-form-select.is-invalid,
+.gamza-form-textarea.is-invalid,
+.gamza-upload-dropzone.is-invalid {
+  border-color: var(--seed-color-fg-critical, #fa342c) !important;
+  background-color: var(--seed-color-bg-critical-weak, #fdf0f0);
+  animation: gamzaShake 0.3s ease-in-out;
+}
+
+@keyframes gamzaShake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-4px); }
+  75% { transform: translateX(4px); }
+}
+
+.gamza-form-error {
+  display: none;
+  font-size: var(--seed-font-size-t2, 0.75rem);
+  line-height: var(--seed-line-height-t2, 1rem);
+  color: var(--seed-color-fg-critical, #fa342c);
+  margin-top: 5px;
+  padding-left: 2px;
+}
+
+.gamza-form-error.visible {
+  display: block;
+}
+
+/* --- 7. 이미지 업로드 & 드롭존 --- */
+.gamza-upload-dropzone,
+.gamza-dropzone {
+  position: relative;
+  min-height: 160px;
+  background-color: var(--seed-gray-100, #f7f8f9);
+  border: 2px dashed var(--seed-gray-400, #dcdee3);
+  border-radius: var(--radius-md, 12px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  overflow: hidden;
+  transition: transform var(--seed-duration-pressed-scale, 150ms) var(--seed-timing-feedback, cubic-bezier(0.2, 0, 0, 1)),
+              background-color var(--seed-duration-color-transition, 150ms) var(--seed-timing-feedback, cubic-bezier(0.2, 0, 0, 1)),
+              border-color var(--seed-duration-color-transition, 150ms) var(--seed-timing-feedback, cubic-bezier(0.2, 0, 0, 1));
+}
+
+.gamza-upload-dropzone:hover,
+.gamza-dropzone:hover {
+  background-color: var(--color-point-light, #fff2ec);
+  border-color: var(--color-point, #ff6600);
+}
+
+.gamza-upload-dropzone.is-dragover,
+.gamza-dropzone.is-dragover {
+  background-color: var(--seed-carrot-200, #ffe8db);
+  border-color: var(--color-point, #ff6600);
+  transform: scale(1.01);
+}
+
+.gamza-upload-dropzone:active,
+.gamza-dropzone:active {
+  transform: scale(0.985);
+  background-color: var(--seed-color-bg-brand-weak-pressed, #ffe8db);
+  border-color: var(--seed-carrot-600, #ff6600);
+}
+
+.gamza-file-input {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  cursor: pointer;
+  z-index: 5;
+}
+
+.gamza-dropzone-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 18px;
+  pointer-events: none;
+}
+
+.gamza-camera-icon {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background-color: #FFFFFF;
+  color: var(--color-primary, #ff6600);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 10px;
+  box-shadow: var(--shadow-sm, 0 1px 3px rgba(0, 0, 0, 0.05));
+}
+
+.gamza-dropzone-title {
+  font-size: var(--seed-font-size-t4, 0.875rem);
+  line-height: var(--seed-line-height-t4, 1.1875rem);
+  font-weight: var(--seed-font-weight-bold, 700);
+  color: var(--color-text-main, #1a1c20);
+}
+
+.gamza-highlight {
+  color: var(--color-point-deep, #e14d00);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  font-weight: 700;
+}
+
+.gamza-dropzone-desc {
+  font-size: var(--seed-font-size-t2, 0.75rem);
+  line-height: var(--seed-line-height-t2, 1rem);
+  color: var(--color-text-muted, #868b94);
+  margin-top: 4px;
+}
+
+/* 이미지 미리보기 래퍼 */
+.gamza-image-preview-wrapper {
+  position: relative;
+  width: 100%;
+  height: 180px;
+  background-color: var(--seed-gray-1000, #1a1c20);
+}
+
+.gamza-image-preview {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.gamza-image-remove-btn {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background-color: rgba(26, 28, 32, 0.75);
+  color: #FFFFFF;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  border: none;
+  z-index: 10;
+  transition: transform var(--seed-duration-pressed-scale, 150ms) var(--seed-timing-feedback, cubic-bezier(0.2, 0, 0, 1)),
+              background-color var(--seed-duration-color-transition, 150ms) var(--seed-timing-feedback, cubic-bezier(0.2, 0, 0, 1));
+}
+
+.gamza-image-remove-btn:hover {
+  background-color: var(--seed-color-fg-critical, #fa342c);
+  transform: scale(1.08);
+}
+
+.gamza-image-remove-btn:active {
+  transform: scale(var(--seed-scale-pressed-icon, 0.938));
+}
+
+.gamza-preview-tag {
+  position: absolute;
+  bottom: 10px;
+  left: 10px;
+  background-color: rgba(26, 28, 32, 0.85);
+  color: #FFFFFF;
+  font-size: var(--seed-font-size-t1, 0.6875rem);
+  line-height: var(--seed-line-height-t1, 0.9375rem);
+  font-weight: var(--seed-font-weight-bold, 700);
+  padding: 3px 8px;
+  border-radius: 6px;
+  backdrop-filter: blur(4px);
+}
+
+/* 추천 샘플 팔레트 */
+.gamza-sample-palette {
+  margin-top: 10px;
+  background-color: var(--seed-gray-100, #f7f8f9);
+  padding: 10px 12px;
+  border-radius: var(--radius-sm, 8px);
+  border: 1px solid var(--color-border, #eeeff1);
+}
+
+.gamza-sample-palette-label {
+  font-size: var(--seed-font-size-t2, 0.75rem);
+  line-height: var(--seed-line-height-t2, 1rem);
+  font-weight: var(--seed-font-weight-bold, 700);
+  color: var(--color-text-sub, #555d6d);
+  display: block;
+  margin-bottom: 6px;
+}
+
+.gamza-sample-chips {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  padding-bottom: 2px;
+}
+
+.gamza-sample-chip {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background-color: #FFFFFF;
+  border: 1px solid var(--color-border, #eeeff1);
+  border-radius: var(--radius-sm, 8px);
+  padding: 4px 8px 4px 4px;
+  font-size: var(--seed-font-size-t2, 0.75rem);
+  line-height: var(--seed-line-height-t2, 1rem);
+  font-weight: var(--seed-font-weight-medium, 500);
+  color: var(--color-text-main, #1a1c20);
+  cursor: pointer;
+  white-space: nowrap;
+  flex-shrink: 0;
+  transition: transform var(--seed-duration-pressed-scale, 150ms) var(--seed-timing-feedback, cubic-bezier(0.2, 0, 0, 1)),
+              background-color var(--seed-duration-color-transition, 150ms) var(--seed-timing-feedback, cubic-bezier(0.2, 0, 0, 1)),
+              border-color var(--seed-duration-color-transition, 150ms) var(--seed-timing-feedback, cubic-bezier(0.2, 0, 0, 1)),
+              color var(--seed-duration-color-transition, 150ms) var(--seed-timing-feedback, cubic-bezier(0.2, 0, 0, 1));
+}
+
+.gamza-sample-chip img {
+  width: 24px;
+  height: 24px;
+  border-radius: 4px;
+  object-fit: cover;
+}
+
+.gamza-sample-chip:hover {
+  border-color: var(--color-point, #ff6600);
+  background-color: #FFFFFF;
+  transform: translateY(-1px);
+}
+
+.gamza-sample-chip:active {
+  transform: scale(var(--seed-scale-pressed-chip, 0.95));
+  background-color: var(--seed-color-bg-neutral-weak-pressed, #eeeff1);
+}
+
+.gamza-sample-chip.is-active {
+  border-color: var(--color-point-hover, #e14d00);
+  background-color: var(--color-point-light, #fff2ec);
+  color: var(--color-point-deep, #e14d00);
+  font-weight: 700;
+  box-shadow: 0 0 0 1.5px var(--color-point, #ff6600);
+}
+
+.gamza-sample-chip.is-active:active {
+  transform: scale(var(--seed-scale-pressed-chip, 0.95));
+  background-color: var(--seed-color-bg-brand-weak-pressed, #ffe8db);
+}
+
+/* --- 8. 셀렉트 박스 커스텀 --- */
+.gamza-select-wrapper {
+  position: relative;
+  width: 100%;
+}
+
+.gamza-form-select {
+  appearance: none;
+  -webkit-appearance: none;
+  padding-right: 38px;
+  cursor: pointer;
+}
+
+.gamza-select-arrow {
+  position: absolute;
+  top: 50%;
+  right: 14px;
+  transform: translateY(-50%);
+  pointer-events: none;
+  color: var(--color-text-muted, #868b94);
+  display: flex;
+  align-items: center;
+}
+
+/* --- 9. 가격 인풋 & 무료나눔 --- */
+.gamza-price-input-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.gamza-price-symbol {
+  position: absolute;
+  left: 14px;
+  font-weight: 600;
+  color: var(--color-text-sub, #555d6d);
+  font-size: var(--seed-font-size-t5, 1rem);
+}
+
+.gamza-price-input {
+  padding-left: 32px;
+  padding-right: 36px;
+  font-size: var(--seed-font-size-t5, 1rem);
+  font-weight: 600;
+}
+
+.gamza-price-unit {
+  position: absolute;
+  right: 14px;
+  font-size: var(--seed-font-size-t4, 0.875rem);
+  color: var(--color-text-sub, #555d6d);
+  pointer-events: none;
+}
+
+.gamza-price-preview {
+  margin-top: 6px;
+  font-size: var(--seed-font-size-t3, 0.8125rem);
+  line-height: var(--seed-line-height-t3, 1.125rem);
+  color: var(--color-primary, #ff6600);
+  background-color: var(--color-secondary, #fff2ec);
+  padding: 5px 10px;
+  border-radius: 6px;
+}
+
+.gamza-price-preview strong {
+  font-weight: 700;
+}
+
+.gamza-checkbox-label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+  user-select: none;
+}
+
+.gamza-checkbox {
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.gamza-checkbox-custom {
+  width: 17px;
+  height: 17px;
+  border: 1.5px solid var(--seed-gray-400, #dcdee3);
+  border-radius: 4px;
+  background-color: #FFFFFF;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform var(--seed-duration-pressed-scale, 150ms) var(--seed-timing-feedback, cubic-bezier(0.2, 0, 0, 1)),
+              background-color var(--seed-duration-color-transition, 150ms) var(--seed-timing-feedback, cubic-bezier(0.2, 0, 0, 1)),
+              border-color var(--seed-duration-color-transition, 150ms) var(--seed-timing-feedback, cubic-bezier(0.2, 0, 0, 1));
+}
+
+.gamza-checkbox-label:active .gamza-checkbox-custom {
+  transform: scale(0.92);
+}
+
+.gamza-checkbox:checked + .gamza-checkbox-custom {
+  background-color: var(--color-point, #ff6600);
+  border-color: var(--color-point, #ff6600);
+}
+
+.gamza-checkbox:checked + .gamza-checkbox-custom::after {
+  content: "";
+  width: 4px;
+  height: 8px;
+  border: solid #FFFFFF;
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg);
+  margin-bottom: 2px;
+}
+
+.gamza-checkbox-text {
+  font-size: var(--seed-font-size-t3, 0.8125rem);
+  line-height: var(--seed-line-height-t3, 1.125rem);
+  font-weight: var(--seed-font-weight-medium, 500);
+  color: var(--color-text-sub, #555d6d);
+}
+
+/* --- 10. 거래 동네 & 칩 --- */
+.gamza-location-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 8px;
+}
+
+.gamza-location-chip {
+  font-size: var(--seed-font-size-t3, 0.8125rem);
+  line-height: var(--seed-line-height-t3, 1.125rem);
+  font-weight: var(--seed-font-weight-medium, 500);
+  color: var(--color-text-sub, #555d6d);
+  background-color: var(--seed-gray-100, #f7f8f9);
+  border: 1px solid var(--color-border, #eeeff1);
+  border-radius: var(--radius-full, 9999px);
+  padding: 4px 11px;
+  cursor: pointer;
+  transition: transform var(--seed-duration-pressed-scale, 150ms) var(--seed-timing-feedback, cubic-bezier(0.2, 0, 0, 1)),
+              background-color var(--seed-duration-color-transition, 150ms) var(--seed-timing-feedback, cubic-bezier(0.2, 0, 0, 1)),
+              border-color var(--seed-duration-color-transition, 150ms) var(--seed-timing-feedback, cubic-bezier(0.2, 0, 0, 1)),
+              color var(--seed-duration-color-transition, 150ms) var(--seed-timing-feedback, cubic-bezier(0.2, 0, 0, 1));
+}
+
+.gamza-location-chip:hover {
+  background-color: var(--color-point-light, #fff2ec);
+  color: var(--color-point-deep, #e14d00);
+  border-color: var(--color-point, #ff6600);
+}
+
+.gamza-location-chip:active {
+  transform: scale(var(--seed-scale-pressed-chip, 0.95));
+  background-color: var(--seed-color-bg-brand-weak-pressed, #ffe8db);
+  border-color: var(--seed-carrot-500, #ff9364);
+  color: var(--seed-carrot-800, #b93901);
+}
+
+/* --- 11. 판매 상태 라디오 카드 선택기 --- */
+.gamza-status-selector {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+}
+
+.gamza-status-option {
+  position: relative;
+  cursor: pointer;
+  user-select: none;
+}
+
+.gamza-status-option input {
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.gamza-status-card {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  padding: 10px 8px;
+  background-color: var(--seed-gray-100, #f7f8f9);
+  border: 1.5px solid var(--color-border, #eeeff1);
+  border-radius: var(--radius-md, 12px);
+  transition: transform var(--seed-duration-pressed-scale, 150ms) var(--seed-timing-feedback, cubic-bezier(0.2, 0, 0, 1)),
+              background-color var(--seed-duration-color-transition, 150ms) var(--seed-timing-feedback, cubic-bezier(0.2, 0, 0, 1)),
+              border-color var(--seed-duration-color-transition, 150ms) var(--seed-timing-feedback, cubic-bezier(0.2, 0, 0, 1)),
+              box-shadow var(--seed-duration-feedback, 150ms) var(--seed-timing-feedback, cubic-bezier(0.2, 0, 0, 1));
+}
+
+.gamza-status-option:active .gamza-status-card {
+  transform: scale(0.97);
+}
+
+.gamza-status-text {
+  font-size: var(--seed-font-size-t4, 0.875rem);
+  line-height: var(--seed-line-height-t4, 1.1875rem);
+  font-weight: var(--seed-font-weight-medium, 500);
+  color: var(--color-text-sub, #555d6d);
+}
+
+.gamza-status-dot {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+.dot-selling { background-color: var(--color-status-selling, #079171); }
+.dot-reserved { background-color: var(--color-status-reserved, #e14d00); }
+.dot-completed { background-color: var(--color-status-completed, #868b94); }
+
+/* 활성화 상태 (체크 시) */
+.status-option-selling input:checked + .gamza-status-card {
+  background-color: var(--color-status-selling-bg, #edfaf6);
+  border-color: var(--color-status-selling, #079171);
+}
+.status-option-selling input:checked + .gamza-status-card .gamza-status-text {
+  color: var(--color-status-selling, #079171);
+}
+
+.status-option-reserved input:checked + .gamza-status-card {
+  background-color: var(--color-status-reserved-bg, #fff2ec);
+  border-color: var(--color-status-reserved, #e14d00);
+}
+.status-option-reserved input:checked + .gamza-status-card .gamza-status-text {
+  color: var(--color-status-reserved, #e14d00);
+}
+
+.status-option-completed input:checked + .gamza-status-card {
+  background-color: var(--color-status-completed-bg, #f3f4f5);
+  border-color: var(--color-status-completed, #868b94);
+}
+.status-option-completed input:checked + .gamza-status-card .gamza-status-text {
+  color: var(--color-status-completed, #868b94);
+}
+
+/* --- 12. 텍스트에어리어 --- */
+.gamza-form-textarea {
+  resize: vertical;
+  min-height: 110px;
+  line-height: var(--seed-line-height-t6, 1.5rem);
+}
+
+/* --- 13. 모달 푸터 액션 버튼 (SEED 24px 내부 여백 체계) --- */
+.gamza-write-modal-footer {
+  padding: 16px 24px;
+  background-color: var(--seed-gray-100, #f7f8f9);
+  border-top: 1px solid var(--color-border, #eeeff1);
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 10px;
+  flex-shrink: 0;
+}
+
+.gamza-btn-cancel,
+.gamza-btn-submit {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 12px 22px;
+  font-size: var(--seed-font-size-t5, 1rem);
+  line-height: var(--seed-line-height-t5, 1.375rem);
+  font-weight: var(--seed-font-weight-bold, 700);
+  border-radius: var(--radius-md, 12px);
+  cursor: pointer;
+  transition: transform var(--seed-duration-pressed-scale, 150ms) var(--seed-timing-feedback, cubic-bezier(0.2, 0, 0, 1)),
+              background-color var(--seed-duration-color-transition, 150ms) var(--seed-timing-feedback, cubic-bezier(0.2, 0, 0, 1)),
+              border-color var(--seed-duration-color-transition, 150ms) var(--seed-timing-feedback, cubic-bezier(0.2, 0, 0, 1)),
+              box-shadow var(--seed-duration-feedback, 150ms) var(--seed-timing-feedback, cubic-bezier(0.2, 0, 0, 1)),
+              color var(--seed-duration-color-transition, 150ms) var(--seed-timing-feedback, cubic-bezier(0.2, 0, 0, 1));
+}
+
+.gamza-btn-cancel {
+  background-color: #FFFFFF;
+  color: var(--color-text-sub, #555d6d);
+  border: 1px solid var(--color-border, #eeeff1);
+}
+
+.gamza-btn-cancel:hover {
+  background-color: var(--seed-gray-200, #f3f4f5);
+  color: var(--color-text-main, #1a1c20);
+  border-color: var(--color-border-hover, #dcdee3);
+}
+
+.gamza-btn-cancel:active {
+  transform: scale(var(--seed-scale-pressed-btn, 0.96));
+  background-color: var(--seed-color-bg-neutral-weak-pressed, #eeeff1);
+  border-color: var(--seed-gray-400, #dcdee3);
+}
+
+.gamza-btn-submit {
+  background-color: var(--color-point, #ff6600);
+  color: var(--color-point-text, #FFFFFF);
+  font-weight: var(--seed-font-weight-bold, 700);
+  border: 1px solid rgba(225, 77, 0, 0.35);
+  box-shadow: var(--shadow-point, 0 3px 12px rgba(255, 102, 0, 0.28));
+}
+
+.gamza-btn-submit:hover {
+  background-color: var(--color-point-hover, #e14d00);
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-point-lg, 0 5px 16px rgba(255, 102, 0, 0.38));
+}
+
+.gamza-btn-submit:active {
+  transform: scale(var(--seed-scale-pressed-btn, 0.96));
+  background-color: var(--seed-color-bg-brand-solid-pressed, #e14d00);
+  box-shadow: 0 1px 4px rgba(225, 77, 0, 0.25);
+}
+
+.gamza-submit-icon {
+  font-size: 1.1rem;
+}
+
+/* --- 14. SEED 반응형 레이아웃 (모바일 대응 & 16px 내부 여백) --- */
+@media (max-width: 767px) {
+  .gamza-write-modal-container {
+    width: 100%;
+    max-width: 100%;
+    max-height: 94vh;
+    border-radius: 20px 20px 0 0;
+    position: fixed;
+    bottom: 0;
+    margin-top: auto;
+  }
+
+  .gamza-write-modal-header {
+    padding: 14px var(--seed-margin-mobile, 16px);
+  }
+
+  .gamza-write-scrollable {
+    padding: 16px var(--seed-margin-mobile, 16px);
+  }
+
+  .gamza-write-modal-footer {
+    padding: 12px var(--seed-margin-mobile, 16px);
+    padding-bottom: calc(12px + env(safe-area-inset-bottom, 0px));
+  }
+
+  .gamza-btn-cancel,
+  .gamza-btn-submit {
+    flex: 1;
+    padding: 12px 14px;
+    font-size: var(--seed-font-size-t4, 0.875rem);
+    line-height: var(--seed-line-height-t4, 1.1875rem);
+  }
+}
+
+/* ========================================================
+   감자 등록 완료 전용 성공 팝업 모달 스타일
+   ======================================================== */
+.gamza-success-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.65);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  z-index: 10000;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.25s ease, visibility 0.25s ease;
+}
+
+.gamza-success-modal-overlay.is-active {
+  opacity: 1;
+  visibility: visible;
+}
+
+.gamza-success-modal-card {
+  width: 100%;
+  max-width: 420px;
+  background-color: #FFFFFF;
+  border-radius: 24px;
+  padding: 32px 24px 24px;
+  box-shadow: 0 20px 48px rgba(0, 0, 0, 0.28);
+  text-align: center;
+  transform: scale(0.9) translateY(12px);
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.gamza-success-modal-overlay.is-active .gamza-success-modal-card {
+  transform: scale(1) translateY(0);
+}
+
+.gamza-success-header {
+  margin-bottom: 20px;
+}
+
+.gamza-success-icon-badge {
+  font-size: 3.5rem;
+  line-height: 1;
+  margin-bottom: 12px;
+  animation: potatoBounce 0.8s ease;
+}
+
+@keyframes potatoBounce {
+  0% { transform: scale(0.5); opacity: 0; }
+  50% { transform: scale(1.15); }
+  75% { transform: scale(0.95); }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+.gamza-success-title {
+  font-size: 1.35rem;
+  font-weight: 800;
+  color: #2D241E;
+  margin: 0 0 6px;
+  letter-spacing: -0.02em;
+}
+
+.gamza-success-subtitle {
+  font-size: 0.92rem;
+  color: #7D7065;
+  margin: 0;
+  line-height: 1.45;
+}
+
+/* 등록된 상품 미리보기 미니 카드 */
+.gamza-success-preview-card {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  background-color: #FAF6F0;
+  border: 1px solid #EFE6D8;
+  border-radius: 16px;
+  padding: 12px;
+  margin-bottom: 24px;
+  text-align: left;
+}
+
+.gamza-success-thumb {
+  width: 76px;
+  height: 76px;
+  object-fit: cover;
+  border-radius: 12px;
+  background-color: #EFE6D8;
+  flex-shrink: 0;
+}
+
+.gamza-success-info {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.gamza-success-badge {
+  display: inline-block;
+  align-self: flex-start;
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: #8B5A2B;
+  background-color: #F1E5D4;
+  padding: 2px 8px;
+  border-radius: 6px;
+}
+
+.gamza-success-prod-title {
+  font-size: 0.98rem;
+  font-weight: 700;
+  color: #2D241E;
+  margin: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.gamza-success-prod-price {
+  font-size: 1rem;
+  font-weight: 800;
+  color: #D35400;
+}
+
+.gamza-success-prod-loc {
+  font-size: 0.8rem;
+  color: #8C827A;
+}
+
+/* 액션 버튼 그룹 */
+.gamza-success-buttons {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.gamza-btn-success-detail {
+  width: 100%;
+  padding: 14px;
+  background: linear-gradient(135deg, #8B5A2B 0%, #6E441E 100%);
+  color: #FFFFFF;
+  border: none;
+  border-radius: 14px;
+  font-size: 0.98rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: transform 0.15s ease, filter 0.15s ease;
+  box-shadow: 0 4px 14px rgba(139, 90, 43, 0.35);
+}
+
+.gamza-btn-success-detail:hover {
+  filter: brightness(1.08);
+  transform: translateY(-1px);
+}
+
+.gamza-btn-success-detail:active {
+  transform: scale(0.98);
+}
+
+.gamza-btn-success-close {
+  width: 100%;
+  padding: 12px;
+  background-color: transparent;
+  color: #7D7065;
+  border: 1px solid #E5DCD1;
+  border-radius: 14px;
+  font-size: 0.92rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.15s ease, color 0.15s ease;
+}
+
+.gamza-btn-success-close:hover {
+  background-color: #F7F3EE;
+  color: #2D241E;
+}

@@ -1,0 +1,716 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>감자 마켓 - 따뜻한 우리 동네 중고거래</title>
+  
+  <!-- 공통 테마 및 화면 1 상품 목록 스타일 -->
+  <link rel="stylesheet" href="./css/theme.css" />
+  <link rel="stylesheet" href="./css/productList.css" />
+
+  <!-- 화면 2 상세 모달 스타일 (연동) -->
+  <link rel="stylesheet" href="./detail-modal.css" />
+
+  <!-- 화면 3 글쓰기 모달 스타일 (연동) -->
+  <link rel="stylesheet" href="./write-modal.css" />
+
+  <!-- 인증 모달 (로그인/회원가입) 스타일 -->
+  <link rel="stylesheet" href="./css/authModal.css" />
+</head>
+<body>
+  <!-- [화면 1] 감자 마켓 메인 앱 마운트 포인트 -->
+  <div id="gamza-app"></div>
+
+  <!-- [화면 2] 상세 팝업(모달) 템플릿 포함 -->
+  <div id="gamzaDetailModal" class="gamza-modal-overlay" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="gamzaModalTitle">
+    <div class="gamza-modal-container">
+      <button type="button" class="gamza-modal-close-btn" id="gamzaModalCloseBtn" aria-label="상세보기 닫기" title="닫기">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+          <path d="M18 6L6 18M6 6l12 12"></path>
+        </svg>
+      </button>
+
+      <div class="gamza-modal-scrollable">
+        <div class="gamza-modal-image-wrapper">
+          <img id="gamzaModalImage" class="gamza-modal-image" src="" alt="상품 이미지" style="display: none;" />
+          <div id="gamzaModalImagePlaceholder" class="gamza-modal-image-placeholder">
+            <span class="gamza-potato-icon">🥔</span>
+            <span>등록된 이미지가 없습니다</span>
+          </div>
+        </div>
+
+        <div class="gamza-modal-body">
+          <div class="gamza-meta-header">
+            <span id="gamzaModalStatusBadge" class="gamza-status-badge status-selling">판매중</span>
+            <span id="gamzaModalCategory" class="gamza-category">카테고리</span>
+          </div>
+
+          <!-- [신규] 작성자 전용 판매 상태 선택 영역 -->
+          <div id="gamzaModalOwnerStatusBar" class="gamza-owner-status-bar" style="display: none;">
+            <div class="gamza-owner-status-label">
+              <span class="gamza-owner-tag">🥔 내 글 관리</span>
+              <span>거래 상태 변경:</span>
+            </div>
+            <div class="gamza-owner-status-chips">
+              <button type="button" class="gamza-owner-status-btn status-selling" data-status="selling">판매중</button>
+              <button type="button" class="gamza-owner-status-btn status-reserved" data-status="reserved">예약중</button>
+              <button type="button" class="gamza-owner-status-btn status-completed" data-status="completed">거래 완료</button>
+            </div>
+          </div>
+
+          <h2 id="gamzaModalTitle" class="gamza-product-title">상품 제목</h2>
+
+          <div class="gamza-sub-info">
+            <span class="gamza-sub-info-item">
+              <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/>
+                <circle cx="12" cy="9" r="2.5"/>
+              </svg>
+              <span id="gamzaModalLocation">지역 정보</span>
+            </span>
+            <span class="gamza-sub-info-dot"></span>
+            <span class="gamza-sub-info-item">
+              <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="10"/>
+                <polyline points="12 6 12 12 16 14"/>
+              </svg>
+              <span id="gamzaModalCreatedAt">시간 정보</span>
+            </span>
+          </div>
+
+          <div id="gamzaModalPrice" class="gamza-product-price">0원</div>
+          <div class="gamza-divider"></div>
+          <div id="gamzaModalDescription" class="gamza-product-description">상세 설명이 들어갑니다.</div>
+        </div>
+
+        <div class="gamza-seller-section">
+          <div class="gamza-seller-left">
+            <img id="gamzaModalSellerAvatar" class="gamza-seller-avatar" src="" alt="판매자 프로필" />
+            <div class="gamza-seller-details">
+              <div class="gamza-seller-name-row">
+                <span id="gamzaModalSellerNickname" class="gamza-seller-nickname">판매자명</span>
+                <span class="gamza-certified-badge">
+                  <span>✓</span> 동네인증
+                </span>
+              </div>
+              <span id="gamzaModalSellerLocation" class="gamza-seller-location">서초구 방배동</span>
+            </div>
+          </div>
+
+          <div class="gamza-manner-box">
+            <div class="gamza-temp-header">
+              <span id="gamzaModalSellerTemp" class="gamza-temp-value">36.5℃</span>
+              <span class="gamza-temp-emoji">🥔</span>
+            </div>
+            <div class="gamza-temp-bar-wrapper">
+              <div id="gamzaModalSellerTempBar" class="gamza-temp-bar-fill" style="width: 50%;"></div>
+            </div>
+            <span class="gamza-temp-label">포슬온도</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="gamza-modal-action-bar">
+        <button type="button" class="gamza-like-btn" id="gamzaModalLikeBtn" aria-label="관심 상품 추가" title="관심 추가">
+          <svg viewBox="0 0 24 24">
+            <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+          </svg>
+        </button>
+
+        <button type="button" class="gamza-chat-btn" id="gamzaModalChatBtn">
+          <svg viewBox="0 0 24 24">
+            <path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm0 14H5.17L4 17.17V4h16v12z"/>
+          </svg>
+          <span>감자톡 채팅하기</span>
+        </button>
+
+        <!-- [신규] 작성자 전용 수정 / 삭제 버튼 그룹 -->
+        <div class="gamza-modal-owner-actions" id="gamzaModalOwnerActions" style="display: none;">
+          <button type="button" class="gamza-owner-btn gamza-owner-edit-btn" id="gamzaModalEditBtn" title="게시글 수정">
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+              <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+            </svg>
+            <span>게시글 수정</span>
+          </button>
+          <button type="button" class="gamza-owner-btn gamza-owner-delete-btn" id="gamzaModalDeleteBtn" title="게시글 삭제">
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="3 6 5 6 21 6"></polyline>
+              <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+              <line x1="10" y1="11" x2="10" y2="17"></line>
+              <line x1="14" y1="11" x2="14" y2="17"></line>
+            </svg>
+            <span>삭제</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- [화면 3] 상품 등록(글쓰기) 모달 템플릿 포함 -->
+  <div id="gamzaWriteModal" class="gamza-write-modal-overlay" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="gamzaWriteModalTitle">
+    <div class="gamza-write-modal-container">
+      <header class="gamza-write-modal-header">
+        <div class="gamza-write-header-title-wrap">
+          <span class="gamza-write-potato-badge">🥔</span>
+          <div>
+            <h2 id="gamzaWriteModalTitle" class="gamza-write-title">내 물건 팔기</h2>
+            <p class="gamza-write-subtitle">동네 이웃과 나눌 상품의 정보를 입력해 주세요</p>
+          </div>
+        </div>
+        <button type="button" class="gamza-write-close-btn" id="gamzaWriteModalCloseBtn" aria-label="글쓰기 모달 닫기" title="닫기">
+          <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="18" y1="6" x2="6" y2="18"></line>
+            <line x1="6" y1="6" x2="18" y2="18"></line>
+          </svg>
+        </button>
+      </header>
+
+      <div class="gamza-write-scrollable">
+        <form id="gamzaWriteForm" class="gamza-write-form" novalidate>
+          <div class="gamza-form-group" id="group-image">
+            <div class="gamza-label-row">
+              <label class="gamza-form-label">상품 이미지 <span class="gamza-required">*</span></label>
+              <span class="gamza-label-tip">직접 업로드하거나 아래 샘플을 선택하세요</span>
+            </div>
+            <div class="gamza-upload-dropzone" id="gamzaUploadDropzone">
+              <input type="file" id="gamzaProductImageInput" class="gamza-file-input" accept="image/png, image/jpeg, image/webp, image/gif" />
+              <div class="gamza-dropzone-content" id="gamzaDropzonePrompt">
+                <div class="gamza-camera-icon">
+                  <svg viewBox="0 0 24 24" width="32" height="32" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path>
+                    <circle cx="12" cy="13" r="4"></circle>
+                  </svg>
+                </div>
+                <p class="gamza-dropzone-title">이미지 파일 드래그 또는 <span class="gamza-highlight">PC에서 찾기</span></p>
+                <p class="gamza-dropzone-desc">JPG, PNG, WEBP 권장 (1장 등록)</p>
+              </div>
+              <div class="gamza-image-preview-wrapper" id="gamzaImagePreviewWrapper" style="display: none;">
+                <img id="gamzaImagePreview" class="gamza-image-preview" src="" alt="상품 미리보기" />
+                <button type="button" class="gamza-image-remove-btn" id="gamzaImageRemoveBtn" title="이미지 삭제">
+                  <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="18" y1="6" x2="6" y2="18"></line>
+                    <line x1="6" y1="6" x2="18" y2="18"></line>
+                  </svg>
+                </button>
+                <div class="gamza-preview-tag">미리보기</div>
+              </div>
+            </div>
+
+            <div class="gamza-sample-palette">
+              <span class="gamza-sample-palette-label">💡 추천 샘플 사진:</span>
+              <div class="gamza-sample-chips" id="gamzaSampleChips">
+                <button type="button" class="gamza-sample-chip" data-img="https://images.unsplash.com/photo-1517336714731-489689fd1ca8?w=600&auto=format&fit=crop&q=80">
+                  <img src="https://images.unsplash.com/photo-1517336714731-489689fd1ca8?w=100&auto=format&fit=crop&q=80" alt="맥북 샘플" />
+                  <span>디지털</span>
+                </button>
+                <button type="button" class="gamza-sample-chip" data-img="https://images.unsplash.com/photo-1530018607912-eff2daa1bac4?w=600&auto=format&fit=crop&q=80">
+                  <img src="https://images.unsplash.com/photo-1530018607912-eff2daa1bac4?w=100&auto=format&fit=crop&q=80" alt="원목식탁 샘플" />
+                  <span>가구</span>
+                </button>
+                <button type="button" class="gamza-sample-chip" data-img="https://images.unsplash.com/photo-1551028719-00167b16eac5?w=600&auto=format&fit=crop&q=80">
+                  <img src="https://images.unsplash.com/photo-1551028719-00167b16eac5?w=100&auto=format&fit=crop&q=80" alt="의류 플리스 샘플" />
+                  <span>의류</span>
+                </button>
+                <button type="button" class="gamza-sample-chip" data-img="https://images.unsplash.com/photo-1517668808822-9ebb02f2a0e6?w=600&auto=format&fit=crop&q=80">
+                  <img src="https://images.unsplash.com/photo-1517668808822-9ebb02f2a0e6?w=100&auto=format&fit=crop&q=80" alt="커피머신 샘플" />
+                  <span>가전</span>
+                </button>
+                <button type="button" class="gamza-sample-chip" data-img="https://images.unsplash.com/photo-1512820790803-83ca734da794?w=600&auto=format&fit=crop&q=80">
+                  <img src="https://images.unsplash.com/photo-1512820790803-83ca734da794?w=100&auto=format&fit=crop&q=80" alt="도서 샘플" />
+                  <span>도서</span>
+                </button>
+              </div>
+            </div>
+            <p class="gamza-form-error" id="error-image">상품 이미지를 등록하거나 샘플을 선택해주세요.</p>
+          </div>
+
+          <div class="gamza-form-group" id="group-title">
+            <div class="gamza-label-row">
+              <label for="gamzaProductTitle" class="gamza-form-label">상품명 <span class="gamza-required">*</span></label>
+              <span class="gamza-char-counter"><span id="gamzaTitleCounter">0</span>/50</span>
+            </div>
+            <input type="text" id="gamzaProductTitle" class="gamza-form-input" placeholder="상품명을 입력해주세요 (예: 맥북 에어 M2 스페이스 그레이)" maxlength="50" autocomplete="off" required />
+            <p class="gamza-form-error" id="error-title">상품명을 2자 이상 입력해주세요.</p>
+          </div>
+
+          <div class="gamza-form-group" id="group-category">
+            <label for="gamzaProductCategory" class="gamza-form-label">카테고리 <span class="gamza-required">*</span></label>
+            <div class="gamza-select-wrapper">
+              <select id="gamzaProductCategory" class="gamza-form-select" required>
+                <option value="" disabled selected>카테고리를 선택해주세요</option>
+                <option value="디지털기기">디지털기기</option>
+                <option value="가구/인테리어">가구/인테리어</option>
+                <option value="의류">의류</option>
+                <option value="생활가전">생활가전</option>
+                <option value="도서/티켓">도서/티켓</option>
+                <option value="기타">기타</option>
+              </select>
+              <span class="gamza-select-arrow">
+                <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <polyline points="6 9 12 15 18 9"></polyline>
+                </svg>
+              </span>
+            </div>
+            <p class="gamza-form-error" id="error-category">카테고리를 선택해주세요.</p>
+          </div>
+
+          <div class="gamza-form-group" id="group-price">
+            <div class="gamza-label-row">
+              <label for="gamzaProductPrice" class="gamza-form-label">판매 가격 <span class="gamza-required">*</span></label>
+              <label class="gamza-checkbox-label">
+                <input type="checkbox" id="gamzaPriceFreeCheck" class="gamza-checkbox" />
+                <span class="gamza-checkbox-custom"></span>
+                <span class="gamza-checkbox-text">무료 나눔 🥔</span>
+              </label>
+            </div>
+            <div class="gamza-price-input-wrapper">
+              <span class="gamza-price-symbol">₩</span>
+              <input type="text" id="gamzaProductPrice" class="gamza-form-input gamza-price-input" placeholder="가격을 입력해주세요 (예: 150000)" inputmode="numeric" autocomplete="off" required />
+              <span class="gamza-price-unit">원</span>
+            </div>
+            <p class="gamza-price-preview" id="gamzaPricePreview" style="display: none;">
+              한글 금액: <strong id="gamzaPriceKorean">0원</strong>
+            </p>
+            <p class="gamza-form-error" id="error-price">올바른 가격을 입력해주세요.</p>
+          </div>
+
+          <div class="gamza-form-group" id="group-location">
+            <div class="gamza-label-row">
+              <label for="gamzaProductLocation" class="gamza-form-label">거래 희망 동네 <span class="gamza-required">*</span></label>
+              <span class="gamza-label-tip">동네를 클릭하면 자동 입력됩니다</span>
+            </div>
+            <input type="text" id="gamzaProductLocation" class="gamza-form-input" placeholder="동네 이름을 입력해주세요 (예: 역삼동, 서초동)" autocomplete="off" required />
+            <div class="gamza-location-chips" id="gamzaLocationChips">
+              <button type="button" class="gamza-location-chip" data-loc="서울 강남구 역삼동">역삼동</button>
+              <button type="button" class="gamza-location-chip" data-loc="서울 서초구 반포동">반포동</button>
+              <button type="button" class="gamza-location-chip" data-loc="서울 마포구 연남동">연남동</button>
+              <button type="button" class="gamza-location-chip" data-loc="서울 송파구 잠실동">잠실동</button>
+              <button type="button" class="gamza-location-chip" data-loc="경기 성남시 분당구 정자동">정자동</button>
+              <button type="button" class="gamza-location-chip" data-loc="서울 영등포구 여의도동">여의도동</button>
+            </div>
+            <p class="gamza-form-error" id="error-location">거래 희망 동네를 입력해주세요.</p>
+          </div>
+
+          <div class="gamza-form-group" id="group-status">
+            <label class="gamza-form-label">판매 상태</label>
+            <div class="gamza-status-selector">
+              <label class="gamza-status-option status-option-selling">
+                <input type="radio" name="gamzaProductStatus" value="selling" checked />
+                <span class="gamza-status-card">
+                  <span class="gamza-status-dot dot-selling"></span>
+                  <span class="gamza-status-text">판매중</span>
+                </span>
+              </label>
+              <label class="gamza-status-option status-option-reserved">
+                <input type="radio" name="gamzaProductStatus" value="reserved" />
+                <span class="gamza-status-card">
+                  <span class="gamza-status-dot dot-reserved"></span>
+                  <span class="gamza-status-text">예약중</span>
+                </span>
+              </label>
+              <label class="gamza-status-option status-option-completed">
+                <input type="radio" name="gamzaProductStatus" value="completed" />
+                <span class="gamza-status-card">
+                  <span class="gamza-status-dot dot-completed"></span>
+                  <span class="gamza-status-text">거래 완료</span>
+                </span>
+              </label>
+            </div>
+          </div>
+
+          <div class="gamza-form-group" id="group-description">
+            <div class="gamza-label-row">
+              <label for="gamzaProductDesc" class="gamza-form-label">자세한 설명 <span class="gamza-required">*</span></label>
+              <span class="gamza-char-counter"><span id="gamzaDescCounter">0</span>/500</span>
+            </div>
+            <textarea id="gamzaProductDesc" class="gamza-form-textarea" rows="5" placeholder="상품의 상태, 구매 시기, 하자 유무, 거래 선호 장소 등을 솔직하고 자세하게 적어주세요. 가품이나 판매금지 물품은 게시가 제한될 수 있습니다." maxlength="500" required></textarea>
+            <p class="gamza-form-error" id="error-description">자세한 설명을 5자 이상 작성해주세요.</p>
+          </div>
+        </form>
+      </div>
+
+      <footer class="gamza-write-modal-footer">
+        <button type="button" class="gamza-btn-cancel" id="gamzaWriteCancelBtn">취소</button>
+        <button type="button" class="gamza-btn-submit" id="gamzaWriteSubmitBtn">
+          <span class="gamza-submit-icon">🥔</span>
+          <span>감자 등록 완료</span>
+        </button>
+      </footer>
+    </div>
+  </div>
+
+  <!-- [화면 4] 로그인 & 회원가입 모달 템플릿 -->
+  <div id="gamzaAuthModal" class="gamza-auth-overlay" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="gamzaAuthTitle">
+    <div class="gamza-auth-container">
+      <button type="button" class="gamza-auth-close-btn" id="gamzaAuthCloseBtn" aria-label="닫기" title="닫기">
+        <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="18" y1="6" x2="6" y2="18"></line>
+          <line x1="6" y1="6" x2="18" y2="18"></line>
+        </svg>
+      </button>
+
+      <div class="gamza-auth-header">
+        <div class="gamza-auth-logo-badge">🥔</div>
+        <h2 id="gamzaAuthTitle" class="gamza-auth-title">감자 마켓</h2>
+        <p class="gamza-auth-subtitle">동네 이웃과 따뜻한 나눔과 거래를 시작해보세요</p>
+      </div>
+
+      <!-- 액션 유도 안내 배너 (글쓰기 등에서 진입 시) -->
+      <div id="gamzaAuthPromptBanner" class="gamza-auth-prompt-banner">
+        <span>💡</span>
+        <span id="gamzaAuthPromptBannerText">물건을 등록하려면 로그인이 필요해요!</span>
+      </div>
+
+      <!-- 로그인 / 회원가입 탭 -->
+      <div class="gamza-auth-tabs">
+        <button type="button" id="gamzaAuthTabLogin" class="gamza-auth-tab active">로그인</button>
+        <button type="button" id="gamzaAuthTabSignup" class="gamza-auth-tab">회원가입</button>
+      </div>
+
+      <!-- 로그인 폼 패널 -->
+      <div id="gamzaAuthPanelLogin" class="gamza-auth-form-panel active">
+        <form id="gamzaLoginForm" novalidate>
+          <div class="gamza-auth-group">
+            <label for="gamzaLoginEmail" class="gamza-auth-label">이메일</label>
+            <input type="email" id="gamzaLoginEmail" class="gamza-auth-input" placeholder="이메일 주소를 입력해주세요" autocomplete="email" required />
+          </div>
+          <div class="gamza-auth-group">
+            <label for="gamzaLoginPassword" class="gamza-auth-label">비밀번호</label>
+            <input type="password" id="gamzaLoginPassword" class="gamza-auth-input" placeholder="비밀번호를 입력해주세요" autocomplete="current-password" required />
+          </div>
+          <div id="gamzaLoginError" class="gamza-auth-error"></div>
+          <button type="submit" id="gamzaLoginSubmitBtn" class="gamza-auth-submit-btn">
+            <span>로그인하기</span>
+          </button>
+        </form>
+        <div class="gamza-auth-switch-text">
+          아직 감자 마켓 회원이 아니신가요?
+          <button type="button" id="gamzaToSignupLink" class="gamza-auth-switch-link">회원가입</button>
+        </div>
+      </div>
+
+      <!-- 회원가입 폼 패널 -->
+      <div id="gamzaAuthPanelSignup" class="gamza-auth-form-panel">
+        <form id="gamzaSignupForm" novalidate>
+          <div class="gamza-auth-group">
+            <div class="gamza-auth-label">
+              <span>닉네임 <span class="gamza-auth-required">*</span></span>
+              <span class="gamza-auth-tag">필수 입력</span>
+            </div>
+            <input type="text" id="gamzaSignupNickname" class="gamza-auth-input" placeholder="활동할 닉네임 (2자 이상)" maxlength="20" autocomplete="nickname" required />
+          </div>
+          <div class="gamza-auth-group">
+            <label for="gamzaSignupEmail" class="gamza-auth-label">이메일 <span class="gamza-auth-required">*</span></label>
+            <input type="email" id="gamzaSignupEmail" class="gamza-auth-input" placeholder="이메일 주소를 입력해주세요" autocomplete="email" required />
+          </div>
+          <div class="gamza-auth-group">
+            <label for="gamzaSignupPassword" class="gamza-auth-label">비밀번호 <span class="gamza-auth-required">*</span></label>
+            <input type="password" id="gamzaSignupPassword" class="gamza-auth-input" placeholder="비밀번호 (6자 이상)" autocomplete="new-password" required />
+          </div>
+          <div class="gamza-auth-group">
+            <label for="gamzaSignupPasswordConfirm" class="gamza-auth-label">비밀번호 확인 <span class="gamza-auth-required">*</span></label>
+            <input type="password" id="gamzaSignupPasswordConfirm" class="gamza-auth-input" placeholder="비밀번호를 한번 더 입력해주세요" autocomplete="new-password" required />
+          </div>
+          <div id="gamzaSignupError" class="gamza-auth-error"></div>
+          <button type="submit" id="gamzaSignupSubmitBtn" class="gamza-auth-submit-btn">
+            <span>감자 마켓 시작하기</span>
+          </button>
+        </form>
+        <div class="gamza-auth-switch-text">
+          이미 계정이 있으신가요?
+          <button type="button" id="gamzaToLoginLink" class="gamza-auth-switch-link">로그인</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 상세 모달 및 글쓰기 모달 스크립트 로드 -->
+  <script src="./detail-modal.js"></script>
+  <script src="./write-modal.js"></script>
+
+  <!-- [화면 1] 상품 목록 앱 초기화 및 Supabase 실시간 DB 연동 스크립트 -->
+  <script type="module">
+    import { ProductListApp } from "./js/productList.js";
+    import {
+      fetchProducts,
+      createProduct,
+      updateProduct,
+      updateProductStatus,
+      deleteProduct,
+      isCurrentUserAuthor,
+      toggleProductLike,
+      checkProductLiked,
+      subscribeToProductChanges,
+      getCurrentUser,
+      getCurrentUserProfile,
+      signOutUser,
+      onAuthStateChange
+    } from "./js/supabaseClient.js";
+    import {
+      initAuthModal,
+      openAuthModal,
+      closeAuthModal,
+      showGamzaToast
+    } from "./js/authModal.js";
+
+    // 1. 화면 1 상품 목록 앱 인스턴스 생성 (초기 로딩 상태 적용)
+    const app = new ProductListApp({
+      container: document.getElementById("gamza-app"),
+      initialProducts: [], // Supabase에서 비동기로 불러옴
+      
+      // [화면 2: 상세 모달 열기]
+      onCardClick: async (productId, product) => {
+        console.log(`[감자 마켓] 상세 모달 요청 - ID: ${productId}`, product);
+        
+        // Supabase DB에서 현재 사용자의 찜 상태 확인
+        try {
+          const isLiked = await checkProductLiked(productId);
+          product.isLiked = isLiked;
+        } catch (err) {
+          console.warn("[감자 마켓] 찜 상태 조회 실패:", err);
+        }
+
+        // 현재 사용자가 해당 게시글의 작성자인지 확인 (Auth 유저 또는 로컬 익명 세션)
+        let isOwner = false;
+        try {
+          isOwner = await isCurrentUserAuthor(product);
+        } catch (err) {
+          console.warn("[감자 마켓] 작성자 판별 실패:", err);
+        }
+
+        if (typeof window.openDetailModal === "function") {
+          window.openDetailModal(product, { isOwner });
+        }
+      },
+
+      // [화면 3: 글쓰기 버튼 클릭 - 요구사항 3: 미로그인 시 로그인 모달 먼저, 로그인 성공 시 글쓰기 창 이어서 오픈]
+      onWriteClick: async () => {
+        console.log("[감자 마켓] 글쓰기 버튼 클릭 -> 로그인 여부 확인 중...");
+        
+        try {
+          const user = await getCurrentUser();
+          
+          if (!user) {
+            // 미로그인 상태 -> 로그인 모달 띄우고 성공 시 글쓰기 창 오픈
+            console.log("[감자 마켓] 미로그인 상태 -> 로그인 모달 오픈");
+            openAuthModal({
+              mode: "login",
+              message: "물건을 등록하려면 먼저 로그인이 필요해요! 🥔",
+              onSuccess: () => {
+                console.log("[감자 마켓] 로그인 성공 후 글쓰기 모달 자동 오픈");
+                if (typeof window.openWriteModal === "function") {
+                  window.openWriteModal();
+                }
+              }
+            });
+            return;
+          }
+
+          // 이미 로그인되어 있으면 바로 글쓰기 모달 열기
+          if (typeof window.openWriteModal === "function") {
+            window.openWriteModal();
+          }
+        } catch (err) {
+          console.error("[감자 마켓] 로그인 확인 중 오류:", err);
+          if (typeof window.openWriteModal === "function") {
+            window.openWriteModal();
+          }
+        }
+      },
+
+      // [상단 우측 로그인 버튼 클릭 -> 로그인 모달 오픈]
+      onLoginClick: () => {
+        console.log("[감자 마켓] 로그인 버튼 클릭 -> 인증 모달 오픈");
+        openAuthModal({ mode: "login" });
+      },
+
+      // [상단 우측 로그아웃 버튼 클릭 -> 로그아웃 처리]
+      onLogoutClick: async () => {
+        try {
+          await signOutUser();
+          showGamzaToast("로그아웃되었습니다.");
+        } catch (err) {
+          console.error("[Supabase] 로그아웃 실패:", err);
+          showGamzaToast("로그아웃 중 오류가 발생했습니다.", "error");
+        }
+      }
+    });
+
+    window.gamzaProductList = app;
+
+    // 2. 인증 모달 초기화
+    initAuthModal({
+      onAuthSuccess: (user, profile) => {
+        app.updateAuthUI(user, profile);
+      }
+    });
+
+    // 3. Supabase Auth 상태 실시간 리스너 연결 (로그인/로그아웃/세션 갱신 시 우측 상단 버튼 전환)
+    onAuthStateChange((event, session, user, profile) => {
+      console.log(`[Supabase Auth] 상태 변경 이벤트: ${event}`, { user, profile });
+      app.updateAuthUI(user, profile);
+    });
+
+    // 4. 초기 세션 확인 및 우측 상단 버튼 UI 동기화
+    async function syncInitialAuth() {
+      try {
+        const user = await getCurrentUser();
+        if (user) {
+          const profile = await getCurrentUserProfile();
+          app.updateAuthUI(user, profile);
+        } else {
+          app.updateAuthUI(null, null);
+        }
+      } catch (err) {
+        console.warn("[Supabase Auth] 초기 인증 확인 실패:", err);
+        app.updateAuthUI(null, null);
+      }
+    }
+    syncInitialAuth();
+
+    // 5. Supabase DB에서 상품 목록 비동기 로딩
+    async function loadSupabaseProducts() {
+      try {
+        app.setLoading(true);
+        console.log("[Supabase] 상품 데이터 로딩 시작...");
+        const products = await fetchProducts();
+        console.log(`[Supabase] 상품 데이터 로드 완료 (${products.length}건):`, products);
+        app.setProducts(products);
+      } catch (err) {
+        console.error("[Supabase] 데이터 로딩 실패, 폴백 처리:", err);
+        const grid = document.getElementById("product-grid");
+        if (grid) {
+          grid.innerHTML = `
+            <div class="empty-state" style="padding: 60px 20px;">
+              <div class="empty-icon" style="font-size: 3rem;">⚠️</div>
+              <h3 class="empty-title" style="margin-top: 16px;">데이터베이스 연결에 실패했습니다</h3>
+              <p class="empty-desc">잠시 후 다시 시도해주세요. (${err.message || 'Error'})</p>
+              <button type="button" class="btn-reset-filters" onclick="location.reload()">새로고침</button>
+            </div>
+          `;
+        }
+      }
+    }
+
+    // 6. 관심 상품(찜) 토글 이벤트 수신 -> Supabase DB 반영
+    window.addEventListener("gamza:toggle-like", async (e) => {
+      const { productId, isLiked } = e.detail || {};
+      if (!productId) return;
+
+      console.log(`[Supabase] 찜 토글 요청 - 상품 ID: ${productId}, 찜: ${isLiked}`);
+      try {
+        const updatedCount = await toggleProductLike(productId, isLiked);
+        if (typeof updatedCount === "number") {
+          app.updateProductLikes(productId, updatedCount, isLiked);
+        }
+      } catch (err) {
+        console.error("[Supabase] 찜 토글 반영 실패:", err);
+      }
+    });
+
+    // 7. 거래 상태 변경 이벤트 수신 -> Supabase DB 저장 및 목록/상세 즉시 반영
+    window.addEventListener("gamza:change-status", async (e) => {
+      const { productId, newStatus } = e.detail || {};
+      if (!productId || !newStatus) return;
+
+      const statusLabels = { selling: "판매중", reserved: "예약중", completed: "거래 완료" };
+      console.log(`[Supabase] 상품 거래 상태 변경 요청 - ID: ${productId}, 신규 상태: ${newStatus}`);
+      try {
+        await updateProductStatus(productId, newStatus);
+        app.updateProductStatus(productId, newStatus);
+        showGamzaToast(`거래 상태가 '${statusLabels[newStatus] || newStatus}'(으)로 변경되었습니다! 🥔`);
+      } catch (err) {
+        console.error("[Supabase] 상품 거래 상태 변경 실패:", err);
+        showGamzaToast("거래 상태 변경 중 오류가 발생했습니다.", "error");
+      }
+    });
+
+    // 8. 작성자 게시글 수정 이벤트 수신 -> 수정 모달 오픈
+    window.addEventListener("gamza:edit-product", (e) => {
+      const { product } = e.detail || {};
+      if (!product) return;
+
+      if (typeof window.closeDetailModal === "function") {
+        window.closeDetailModal();
+      }
+
+      if (typeof window.openWriteModalForEdit === "function") {
+        window.openWriteModalForEdit(product);
+      }
+    });
+
+    // 9. 작성자 게시글 삭제 이벤트 수신 -> Supabase DB 삭제 및 목록 제거
+    window.addEventListener("gamza:delete-product", async (e) => {
+      const { productId } = e.detail || {};
+      if (!productId) return;
+
+      console.log(`[Supabase] 상품 삭제 요청 - ID: ${productId}`);
+      try {
+        await deleteProduct(productId);
+        app.removeProduct(productId);
+        if (typeof window.closeDetailModal === "function") {
+          window.closeDetailModal();
+        }
+        showGamzaToast("상품이 성공적으로 삭제되었습니다. 🥔");
+      } catch (err) {
+        console.error("[Supabase] 상품 삭제 실패:", err);
+        showGamzaToast("상품 삭제 중 오류가 발생했습니다.", "error");
+      }
+    });
+
+    // 10. 화면 3 상품 등록/수정 모달 Supabase DB 저장 연동
+    if (window.GamzaWriteModal && typeof window.GamzaWriteModal.init === "function") {
+      window.GamzaWriteModal.init({
+        // [신규 등록]
+        onProductSubmit: async (newProduct) => {
+          console.log("[Supabase] 새 상품 DB 저장 시작:", newProduct);
+          // Supabase products 테이블에 INSERT (로그인된 user.id가 seller_id로 저장됨)
+          const savedProduct = await createProduct(newProduct);
+          console.log("[Supabase] 새 상품 DB 저장 완료:", savedProduct);
+          
+          // 화면 1 목록 최상단에 추가
+          app.addProduct(savedProduct);
+          showGamzaToast("상품이 성공적으로 등록되었습니다! 🥔");
+          return savedProduct;
+        },
+        // [기존 상품 수정]
+        onProductUpdate: async (productId, editData) => {
+          console.log("[Supabase] 상품 DB 수정 시작:", productId, editData);
+          const updatedProduct = await updateProduct(productId, editData);
+          console.log("[Supabase] 상품 DB 수정 완료:", updatedProduct);
+
+          // 화면 1 목록 및 상세 모달 데이터 갱신
+          app.updateProduct(updatedProduct);
+          showGamzaToast("상품 정보가 성공적으로 수정되었습니다! 🥔");
+          return updatedProduct;
+        }
+      });
+    }
+
+    // 11. Supabase Realtime 구독 (다른 사용자 또는 브라우저 탭에서의 실시간 변경 반영)
+    try {
+      subscribeToProductChanges({
+        onInsert: (newlyAddedProduct) => {
+          console.log("[Supabase Realtime] 실시간 상품 등록 수신 -> 목록에 추가:", newlyAddedProduct);
+          app.addProduct(newlyAddedProduct);
+        },
+        onUpdate: (updatedProduct) => {
+          console.log("[Supabase Realtime] 실시간 상품 수정 수신 -> 목록 갱신:", updatedProduct);
+          app.updateProduct(updatedProduct);
+        },
+        onDelete: (deletedProductId) => {
+          console.log("[Supabase Realtime] 실시간 상품 삭제 수신 -> 목록에서 제거:", deletedProductId);
+          app.removeProduct(deletedProductId);
+        }
+      });
+    } catch (realtimeErr) {
+      console.warn("[Supabase Realtime] 실시간 구독 설정 건너뜀:", realtimeErr);
+    }
+
+    // 초기 실행
+    loadSupabaseProducts();
+  </script>
+</body>
+</html>

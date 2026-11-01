@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>감자 마켓 - 상세 팝업(모달) 데모</title>
+  <link rel="stylesheet" href="detail-modal.css" />
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      padding: 40px 20px;
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Apple SD Gothic Neo", "Segoe UI", Roboto, sans-serif;
+      background-color: #f7f8f9;
+      color: #1a1c20;
+      min-height: 100vh;
+    }
+    .demo-header {
+      max-width: 800px;
+      margin: 0 auto 32px;
+      text-align: center;
+    }
+    .demo-header h1 {
+      margin: 0 0 8px;
+      font-size: 28px;
+      color: #ff6600;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+    }
+    .demo-header p {
+      margin: 0;
+      color: #555d6d;
+      font-size: 15px;
+    }
+    .demo-grid {
+      max-width: 800px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 20px;
+    }
+    .demo-card {
+      background: #FFFFFF;
+      border: 1px solid #eeeff1;
+      border-radius: 16px;
+      padding: 18px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      cursor: pointer;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .demo-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+      border-color: #dcdee3;
+    }
+    .demo-card-badge {
+      display: inline-block;
+      align-self: flex-start;
+      padding: 3px 8px;
+      border-radius: 6px;
+      font-size: 12px;
+      font-weight: bold;
+      color: #fff;
+    }
+    .badge-selling { background-color: #079171; }
+    .badge-reserved { background-color: #ff6600; }
+    .badge-completed { background-color: #868b94; }
+
+    .demo-card-title {
+      font-size: 16px;
+      font-weight: 700;
+      margin: 0;
+    }
+    .demo-card-price {
+      font-size: 18px;
+      font-weight: 800;
+      color: #1a1c20;
+    }
+    .demo-btn {
+      margin-top: auto;
+      background: #ff6600;
+      color: #fff;
+      border: none;
+      padding: 10px;
+      border-radius: 10px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+    .demo-toast {
+      position: fixed;
+      bottom: 24px;
+      left: 50%;
+      transform: translateX(-50%) translateY(100px);
+      background: #1a1c20;
+      color: #ffffff;
+      padding: 12px 24px;
+      border-radius: 30px;
+      font-size: 14px;
+      font-weight: 600;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+      z-index: 10000;
+      transition: transform 0.3s ease;
+      pointer-events: none;
+    }
+    .demo-toast.show {
+      transform: translateX(-50%) translateY(0);
+    }
+  </style>
+</head>
+<body>
+
+  <header class="demo-header">
+    <h1>🥔 감자 마켓 [화면 2: 상세 팝업] 데모</h1>
+    <p>아래 상품 카드를 클릭하여 모달 팝업 및 데이터 바인딩 동작을 확인하세요.</p>
+  </header>
+
+  <main class="demo-grid">
+    <!-- 상품 1: 판매중 -->
+    <div class="demo-card" onclick="testOpenModal(0)">
+      <span class="demo-card-badge badge-selling">판매중</span>
+      <h3 class="demo-card-title">M2 맥북 에어 13인치 미드나이트</h3>
+      <div class="demo-card-price">1,050,000원</div>
+      <button class="demo-btn">상세보기 열기</button>
+    </div>
+
+    <!-- 상품 2: 예약중 -->
+    <div class="demo-card" onclick="testOpenModal(1)">
+      <span class="demo-card-badge badge-reserved">예약중</span>
+      <h3 class="demo-card-title">강원도 햇감자 10kg (포슬포슬 분나는 감자)</h3>
+      <div class="demo-card-price">25,000원</div>
+      <button class="demo-btn">상세보기 열기</button>
+    </div>
+
+    <!-- 상품 3: 거래 완료 / 나눔 -->
+    <div class="demo-card" onclick="testOpenModal(2)">
+      <span class="demo-card-badge badge-completed">거래 완료</span>
+      <h3 class="demo-card-title">귀여운 감자 인형 + 미니 쿠션 무료 나눔</h3>
+      <div class="demo-card-price">나눔 🧡</div>
+      <button class="demo-btn">상세보기 열기</button>
+    </div>
+  </main>
+
+  <div id="demoToast" class="demo-toast"></div>
+
+  <!-- 화면 2 모달 템플릿 포함 -->
+  <div id="modalContainer"></div>
+
+  <script src="detail-modal.js"></script>
+  <script>
+    // 모달 HTML 동적 로드 (또는 인라인 포함)
+    fetch('detail-modal.html')
+      .then(res => res.text())
+      .then(html => {
+        document.getElementById('modalContainer').innerHTML = html;
+      });
+
+    // 샘플 테스트 데이터셋
+    const sampleProducts = [
+      {
+        id: 'prod-001',
+        title: 'M2 맥북 에어 13인치 미드나이트 풀박스 S급 급처',
+        status: '판매중',
+        category: '디지털기기',
+        location: '역삼1동',
+        createdAt: '12분 전',
+        price: 1050000,
+        imageUrl: 'https://images.unsplash.com/photo-1517336714731-489689fd1ca8?auto=format&fit=crop&w=800&q=80',
+        description: '올해 초 구매하여 실내에서만 조심스럽게 사용했습니다.\n배터리 성능 98%이고 찍힘이나 스크래치 전혀 없는 S급입니다.\n\n- 본체 풀박스 (정품 충전기, 케이블 포함)\n- 키보드 스킨 및 전용 파우치 같이 드려요!\n\n직거래는 역삼역 4번 출구 앞 희망합니다.',
+        isLiked: false,
+        seller: {
+          nickname: '포슬포슬감자돌이',
+          avatar: 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=120&q=80',
+          location: '강남구 역삼1동',
+          temperature: 42.5
+        }
+      },
+      {
+        id: 'prod-002',
+        title: '강원도 햇감자 10kg (포슬포슬 분나는 수미감자)',
+        status: '예약중',
+        category: '농산물/식품',
+        location: '정자동',
+        createdAt: '1시간 전',
+        price: 25000,
+        imageUrl: 'https://images.unsplash.com/photo-1518977676601-b53f82aba655?auto=format&fit=crop&w=800&q=80',
+        description: '강원도 본가에서 어제 막 수확해서 올려보낸 싱싱한 햇감자입니다!\n쪄먹으면 분이 솔솔 나고 찌개나 감자전 해먹기 딱 좋습니다.\n\n10kg 한 박스이며 상태 아주 튼실합니다. 쿨거래 원해요~',
+        isLiked: true,
+        seller: {
+          nickname: '감자밭주인장',
+          avatar: 'https://images.unsplash.com/photo-1570295999919-56ceb5ecca61?auto=format&fit=crop&w=120&q=80',
+          location: '분당구 정자동',
+          temperature: 58.2
+        }
+      },
+      {
+        id: 'prod-003',
+        title: '귀여운 감자 인형 + 미니 쿠션 무료 나눔합니다',
+        status: '거래 완료',
+        category: '취미/인형',
+        location: '방배본동',
+        createdAt: '어제',
+        price: 0,
+        imageUrl: '', // 이미지 없음 테스트
+        description: '방 정리하면서 아끼던 감자 캐릭터 인형 나눔해요.\n세탁 완료해두었고 상태 깨끗합니다.\n\n따뜻한 이웃분께서 가져가셔서 예쁘게 키워주셨으면 좋겠습니다!',
+        isLiked: false,
+        seller: {
+          nickname: '구운감자러버',
+          avatar: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=120&q=80',
+          location: '서초구 방배본동',
+          temperature: 36.5
+        }
+      }
+    ];
+
+    function testOpenModal(index) {
+      if (typeof openDetailModal === 'function') {
+        openDetailModal(sampleProducts[index]);
+      }
+    }
+
+    // 커스텀 이벤트 리스너 테스트 (채팅 시작, 관심 토글 알림)
+    window.addEventListener('gamza:toggle-like', (e) => {
+      showToast(e.detail.isLiked ? '🧡 관심 목록에 추가되었습니다!' : '관심 목록에서 제외되었습니다.');
+    });
+
+    window.addEventListener('gamza:start-chat', (e) => {
+      showToast(`💬 '${e.detail.productTitle}' 채팅방으로 이동합니다.`);
+    });
+
+    function showToast(msg) {
+      const toast = document.getElementById('demoToast');
+      toast.textContent = msg;
+      toast.classList.add('show');
+      setTimeout(() => toast.classList.remove('show'), 2200);
+    }
+  </script>
+</body>
+</html>

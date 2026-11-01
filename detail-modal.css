@@ -1,0 +1,778 @@
+/* ========================================================
+   감자(Gamza) 마켓 - 상세 팝업(모달) 스타일시트
+   디자인 토큰: SEED Design System (https://seed-design.io/foundations/color)
+   ======================================================== */
+
+:root {
+  --gamza-primary: var(--color-primary, #ff6600);         /* SEED Carrot-600 */
+  --gamza-primary-hover: var(--color-primary-dark, #e14d00);   /* SEED Carrot-700 */
+  --gamza-secondary: var(--color-secondary, #fff2ec);       /* SEED Carrot-100 */
+  --gamza-bg: var(--color-bg, #f7f8f9);              /* SEED Gray-100 */
+  --gamza-card-bg: #FFFFFF;         /* 모달 및 카드 순백 */
+  --gamza-text-main: var(--color-text-main, #1a1c20);       /* SEED Gray-1000 */
+  --gamza-text-sub: var(--color-text-sub, #555d6d);        /* SEED Gray-800 */
+  --gamza-text-muted: var(--color-text-muted, #868b94);      /* SEED Gray-700 */
+  --gamza-border: var(--color-border, #eeeff1);          /* SEED Gray-300 */
+  --gamza-border-hover: var(--color-border-hover, #dcdee3); /* SEED Gray-400 */
+
+  /* 거래 상태 색상 */
+  --gamza-status-selling: var(--color-status-selling, #079171);   /* 판매중 (Green-700) */
+  --gamza-status-reserved: var(--color-status-reserved, #e14d00);  /* 예약중 (Carrot-700) */
+  --gamza-status-completed: var(--color-status-completed, #868b94); /* 거래 완료 (Gray-700) */
+
+  /* 포인트 색상 */
+  --gamza-point: var(--color-point, #ff6600);           /* SEED Carrot-600 */
+  --gamza-point-hover: var(--color-point-hover, #e14d00);     /* SEED Carrot-700 */
+  --gamza-point-text: #FFFFFF;      /* 포인트 버튼 위 텍스트 */
+  --gamza-point-deep: var(--color-point-deep, #e14d00);      /* SEED Carrot-700 */
+
+  /* 포슬온도 색상 */
+  --gamza-temp-color: var(--color-primary, #ff6600);
+  --gamza-temp-track: var(--gamza-border, #eeeff1);
+
+  /* 애니메이션 */
+  --gamza-transition-fast: 0.18s cubic-bezier(0.16, 1, 0.3, 1);
+  --gamza-transition-normal: 0.28s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* 1. 모달 오버레이 */
+.gamza-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.45);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity var(--gamza-transition-normal), visibility var(--gamza-transition-normal);
+  padding: 16px;
+  box-sizing: border-box;
+}
+
+.gamza-modal-overlay.is-active {
+  opacity: 1;
+  visibility: visible;
+}
+
+/* 2. 모달 컨테이너 (SEED Low Density Centered: Max-width 800px) */
+.gamza-modal-container {
+  position: relative;
+  background: var(--gamza-card-bg);
+  width: 92%;
+  max-width: var(--seed-layout-dialog-detail-max-width, 800px);
+  max-height: 90vh;
+  border-radius: 24px;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.16), 0 2px 10px rgba(0, 0, 0, 0.04);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  transform: translateY(20px) scale(0.96);
+  transition: transform var(--gamza-transition-normal), opacity var(--gamza-transition-normal);
+  border: 1px solid var(--gamza-border);
+}
+
+.gamza-modal-overlay.is-active .gamza-modal-container {
+  transform: translateY(0) scale(1);
+}
+
+/* 상단 닫기 플로팅 버튼 - 이미지 위에서도 확실하게 보이도록 고대비/입체감 강화 */
+.gamza-modal-close-btn {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: #FFFFFF;
+  color: var(--gamza-text-main, #1a1c20);
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2), 0 2px 6px rgba(0, 0, 0, 0.08);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 30;
+  transition: transform var(--seed-duration-pressed-scale, 150ms) var(--seed-timing-feedback, cubic-bezier(0.2, 0, 0, 1)),
+              background-color var(--seed-duration-color-transition, 150ms) var(--seed-timing-feedback, cubic-bezier(0.2, 0, 0, 1)),
+              border-color var(--seed-duration-color-transition, 150ms) var(--seed-timing-feedback, cubic-bezier(0.2, 0, 0, 1)),
+              color var(--seed-duration-color-transition, 150ms) var(--seed-timing-feedback, cubic-bezier(0.2, 0, 0, 1)),
+              box-shadow var(--seed-duration-feedback, 150ms) var(--seed-timing-feedback, cubic-bezier(0.2, 0, 0, 1));
+  outline: none;
+}
+
+.gamza-modal-close-btn:hover {
+  background: #f7f8f9;
+  color: var(--gamza-text-main, #1a1c20);
+  transform: scale(1.08) rotate(90deg);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.12), 0 2px 8px rgba(0, 0, 0, 0.08);
+  border-color: #dcdee3;
+}
+
+.gamza-modal-close-btn:active {
+  transform: scale(var(--seed-scale-pressed-icon, 0.938));
+  background-color: var(--seed-color-bg-neutral-weak-pressed, #eeeff1);
+  border-color: var(--seed-gray-400, #dcdee3);
+}
+
+.gamza-modal-close-btn:focus-visible {
+  outline: 2px solid var(--gamza-primary, #ff6600);
+  outline-offset: 2px;
+}
+
+.gamza-modal-close-btn svg {
+  width: 20px;
+  height: 20px;
+  stroke: currentColor;
+  stroke-width: 2.4;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  transition: stroke var(--gamza-transition-fast);
+}
+
+/* 3. 모달 스크롤 영역 (이미지 + 본문 정보 + 판매자 정보) */
+.gamza-modal-scrollable {
+  flex: 1;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* 스크롤바 커스텀 */
+.gamza-modal-scrollable::-webkit-scrollbar {
+  width: 6px;
+}
+.gamza-modal-scrollable::-webkit-scrollbar-track {
+  background: transparent;
+}
+.gamza-modal-scrollable::-webkit-scrollbar-thumb {
+  background-color: var(--gamza-border-hover);
+  border-radius: 10px;
+}
+
+/* 상단 이미지 영역 (16:9 비율) */
+.gamza-modal-image-wrapper {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 10;
+  background-color: #f3f4f5;
+  overflow: hidden;
+}
+
+/* 이미지 상단 닫기 버튼 영역 가독성 보조 그라디언트 */
+.gamza-modal-image-wrapper::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 72px;
+  background: linear-gradient(180deg, rgba(0, 0, 0, 0.28) 0%, rgba(0, 0, 0, 0) 100%);
+  pointer-events: none;
+  z-index: 10;
+}
+
+.gamza-modal-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.4s ease;
+}
+
+.gamza-modal-image:hover {
+  transform: scale(1.02);
+}
+
+/* 이미지 없을 때 플레이스홀더 */
+.gamza-modal-image-placeholder {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: var(--gamza-text-muted);
+  background: linear-gradient(135deg, #f7f8f9 0%, #eeeff1 100%);
+  gap: 8px;
+  font-size: var(--seed-font-size-t4, 0.875rem);
+  line-height: var(--seed-line-height-t4, 1.1875rem);
+}
+
+.gamza-modal-image-placeholder .gamza-potato-icon {
+  font-size: 42px;
+}
+
+/* 4. 본문 정보 영역 (SEED 24px 내부 여백 체계) */
+.gamza-modal-body {
+  padding: 24px 24px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* 상태 뱃지 & 카테고리 헤더 라인 */
+.gamza-meta-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.gamza-status-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 10px;
+  border-radius: 8px;
+  font-size: var(--seed-font-size-t2, 0.75rem);
+  line-height: var(--seed-line-height-t2, 1rem);
+  font-weight: var(--seed-font-weight-bold, 700);
+  letter-spacing: -0.2px;
+  color: #FFFFFF;
+}
+
+.gamza-status-badge.status-selling {
+  background-color: var(--gamza-status-selling);
+}
+
+.gamza-status-badge.status-reserved {
+  background-color: var(--gamza-status-reserved);
+}
+
+.gamza-status-badge.status-completed {
+  background-color: var(--gamza-status-completed);
+}
+
+.gamza-category {
+  font-size: var(--seed-font-size-t3, 0.8125rem);
+  line-height: var(--seed-line-height-t3, 1.125rem);
+  font-weight: var(--seed-font-weight-bold, 700);
+  color: var(--gamza-primary);
+  background-color: var(--gamza-secondary);
+  padding: 4px 10px;
+  border-radius: 8px;
+}
+
+/* 상품명 (제목) - SEED t8Bold */
+.gamza-product-title {
+  font-size: var(--seed-font-size-t8, 1.375rem);
+  line-height: var(--seed-line-height-t8, 1.875rem);
+  font-weight: var(--seed-font-weight-bold, 700);
+  color: var(--gamza-text-main);
+  margin: 0;
+  word-break: break-word;
+  letter-spacing: -0.4px;
+}
+
+/* 위치 및 업로드 시간 - SEED t3Regular */
+.gamza-sub-info {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: var(--seed-font-size-t3, 0.8125rem);
+  line-height: var(--seed-line-height-t3, 1.125rem);
+  font-weight: var(--seed-font-weight-regular, 400);
+  color: var(--gamza-text-sub);
+}
+
+.gamza-sub-info-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.gamza-sub-info-item svg {
+  width: 14px;
+  height: 14px;
+  stroke: var(--gamza-text-muted);
+}
+
+.gamza-sub-info-dot {
+  width: 3px;
+  height: 3px;
+  border-radius: 50%;
+  background-color: var(--gamza-text-muted);
+}
+
+/* 가격 - SEED t9Bold */
+.gamza-product-price {
+  font-size: var(--seed-font-size-t9, 1.5rem);
+  line-height: var(--seed-line-height-t9, 2rem);
+  font-weight: var(--seed-font-weight-bold, 700);
+  color: var(--gamza-text-main);
+  letter-spacing: -0.5px;
+  margin-top: 4px;
+}
+
+.gamza-product-price .price-free {
+  color: var(--gamza-point-deep, #e14d00);
+}
+
+/* 구분선 */
+.gamza-divider {
+  height: 1px;
+  background-color: var(--gamza-border);
+  margin: 4px 0;
+}
+
+/* 상세 설명 - SEED articleBody (t5Regular + t6 line-height) */
+.gamza-product-description {
+  font-size: var(--seed-font-size-t5, 1rem);
+  line-height: var(--seed-line-height-t6, 1.5rem);
+  font-weight: var(--seed-font-weight-regular, 400);
+  color: var(--gamza-text-main);
+  white-space: pre-wrap;
+  word-break: break-word;
+  padding: 4px 0 10px;
+  min-height: 60px;
+}
+
+/* 5. 판매자 정보 영역 */
+.gamza-seller-section {
+  margin: 0 24px 20px;
+  padding: 16px;
+  background-color: var(--gamza-bg);
+  border: 1px solid var(--gamza-border);
+  border-radius: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.gamza-seller-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-width: 0;
+}
+
+.gamza-seller-avatar {
+  width: 46px;
+  height: 46px;
+  border-radius: 50%;
+  object-fit: cover;
+  background-color: #eeeff1;
+  border: 2px solid #FFFFFF;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.06);
+  flex-shrink: 0;
+}
+
+.gamza-seller-details {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.gamza-seller-name-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.gamza-seller-nickname {
+  font-size: var(--seed-font-size-t5, 1rem);
+  line-height: var(--seed-line-height-t5, 1.375rem);
+  font-weight: var(--seed-font-weight-medium, 500);
+  color: var(--gamza-text-main);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.gamza-certified-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  background: #edfaf6;
+  color: #079171;
+  font-size: var(--seed-font-size-t1, 0.6875rem);
+  line-height: var(--seed-line-height-t1, 0.9375rem);
+  font-weight: var(--seed-font-weight-bold, 700);
+  padding: 2px 6px;
+  border-radius: 4px;
+}
+
+.gamza-seller-location {
+  font-size: var(--seed-font-size-t2, 0.75rem);
+  line-height: var(--seed-line-height-t2, 1rem);
+  font-weight: var(--seed-font-weight-regular, 400);
+  color: var(--gamza-text-sub);
+}
+
+/* 감자 매너/포슬 온도 */
+.gamza-manner-box {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 4px;
+  flex-shrink: 0;
+}
+
+.gamza-temp-header {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.gamza-temp-value {
+  font-size: var(--seed-font-size-t5, 1rem);
+  line-height: var(--seed-line-height-t5, 1.375rem);
+  font-weight: var(--seed-font-weight-bold, 700);
+  color: var(--gamza-point-deep, #e14d00);
+}
+
+.gamza-temp-emoji {
+  font-size: 16px;
+}
+
+.gamza-temp-bar-wrapper {
+  width: 70px;
+  height: 6px;
+  background-color: var(--gamza-temp-track);
+  border-radius: 99px;
+  overflow: hidden;
+}
+
+.gamza-temp-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #ff9364 0%, #ff6600 100%);
+  border-radius: 99px;
+  transition: width 0.4s ease;
+}
+
+.gamza-temp-label {
+  font-size: var(--seed-font-size-t1, 0.6875rem);
+  line-height: var(--seed-line-height-t1, 0.9375rem);
+  font-weight: var(--seed-font-weight-regular, 400);
+  color: var(--gamza-text-muted);
+}
+
+/* 6. 하단 고정 액션 바 (SEED 24px 내부 여백 체계) */
+.gamza-modal-action-bar {
+  padding: 16px 24px;
+  background-color: #FFFFFF;
+  border-top: 1px solid var(--gamza-border);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  box-shadow: 0 -4px 16px rgba(0, 0, 0, 0.04);
+}
+
+/* 관심 추가(찜/하트) 버튼 */
+.gamza-like-btn,
+.gamza-heart-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  border-radius: 14px;
+  border: 1.5px solid var(--gamza-border);
+  background-color: var(--gamza-bg);
+  cursor: pointer;
+  color: var(--gamza-text-sub);
+  transition: transform var(--seed-duration-pressed-scale, 150ms) var(--seed-timing-feedback, cubic-bezier(0.2, 0, 0, 1)),
+              background-color var(--seed-duration-color-transition, 150ms) var(--seed-timing-feedback, cubic-bezier(0.2, 0, 0, 1)),
+              border-color var(--seed-duration-color-transition, 150ms) var(--seed-timing-feedback, cubic-bezier(0.2, 0, 0, 1)),
+              color var(--seed-duration-color-transition, 150ms) var(--seed-timing-feedback, cubic-bezier(0.2, 0, 0, 1));
+  flex-shrink: 0;
+}
+
+.gamza-like-btn:hover,
+.gamza-heart-btn:hover {
+  border-color: #fed4d2;
+  background-color: #fdf0f0;
+  color: #fa342c;
+  transform: translateY(-1px);
+}
+
+.gamza-like-btn:active,
+.gamza-heart-btn:active {
+  transform: scale(var(--seed-scale-pressed-icon, 0.938));
+  background-color: var(--seed-color-bg-critical-weak-pressed, #fde7e7);
+  border-color: #feb7b3;
+  color: #fa342c;
+}
+
+.gamza-like-btn.is-liked,
+.gamza-heart-btn.is-liked {
+  border-color: #fed4d2;
+  background-color: #fdf0f0;
+  color: #fa342c;
+}
+
+.gamza-like-btn.is-liked svg,
+.gamza-heart-btn.is-liked svg {
+  fill: #fa342c;
+  stroke: #fa342c;
+  animation: gamzaHeartBeat 0.3s cubic-bezier(0.17, 0.89, 0.32, 1.49);
+}
+
+.gamza-like-btn svg,
+.gamza-heart-btn svg {
+  width: 22px;
+  height: 22px;
+  stroke: currentColor;
+  stroke-width: 2;
+  fill: none;
+  transition: fill var(--seed-duration-color-transition, 150ms) var(--seed-timing-feedback, cubic-bezier(0.2, 0, 0, 1)),
+              stroke var(--seed-duration-color-transition, 150ms) var(--seed-timing-feedback, cubic-bezier(0.2, 0, 0, 1));
+}
+
+@keyframes gamzaHeartBeat {
+  0% { transform: scale(0.8); }
+  50% { transform: scale(1.25); }
+  100% { transform: scale(1); }
+}
+
+/* 채팅 시작하기 버튼 */
+.gamza-chat-btn {
+  flex: 1;
+  height: 48px;
+  border-radius: 14px;
+  border: none;
+  background: var(--gamza-point, #ff6600);
+  color: var(--gamza-point-text, #FFFFFF);
+  font-size: var(--seed-font-size-t5, 1rem);
+  line-height: var(--seed-line-height-t5, 1.375rem);
+  font-weight: var(--seed-font-weight-bold, 700);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  cursor: pointer;
+  box-shadow: 0 4px 14px rgba(255, 102, 0, 0.28);
+  border: 1px solid rgba(225, 77, 0, 0.3);
+  transition: transform var(--seed-duration-pressed-scale, 150ms) var(--seed-timing-feedback, cubic-bezier(0.2, 0, 0, 1)),
+              background-color var(--seed-duration-color-transition, 150ms) var(--seed-timing-feedback, cubic-bezier(0.2, 0, 0, 1)),
+              box-shadow var(--seed-duration-feedback, 150ms) var(--seed-timing-feedback, cubic-bezier(0.2, 0, 0, 1)),
+              border-color var(--seed-duration-color-transition, 150ms) var(--seed-timing-feedback, cubic-bezier(0.2, 0, 0, 1));
+}
+
+.gamza-chat-btn:hover {
+  background: var(--gamza-point-hover, #e14d00);
+  box-shadow: 0 6px 18px rgba(255, 102, 0, 0.38);
+  transform: translateY(-1px);
+}
+
+.gamza-chat-btn:active {
+  transform: scale(var(--seed-scale-pressed-btn, 0.96));
+  background-color: var(--seed-color-bg-brand-solid-pressed, #e14d00);
+  box-shadow: 0 2px 8px rgba(225, 77, 0, 0.2);
+}
+
+.gamza-chat-btn svg {
+  width: 20px;
+  height: 20px;
+  fill: currentColor;
+}
+
+/* --- 작성자 전용: 거래 상태 변경 바 --- */
+.gamza-owner-status-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px;
+  background-color: var(--gamza-secondary, #fff2ec);
+  border: 1.5px solid #ffd5c0;
+  border-radius: 14px;
+  padding: 12px 16px;
+  margin: 14px 0 6px 0;
+}
+
+.gamza-owner-status-label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: var(--seed-font-size-t3, 0.8125rem);
+  font-weight: var(--seed-font-weight-bold, 700);
+  color: var(--gamza-primary-hover, #e14d00);
+}
+
+.gamza-owner-tag {
+  background-color: var(--gamza-primary, #ff6600);
+  color: #ffffff;
+  padding: 3px 8px;
+  border-radius: 6px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: -0.2px;
+}
+
+.gamza-owner-status-chips {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.gamza-owner-status-btn {
+  padding: 6px 14px;
+  border-radius: 10px;
+  font-size: var(--seed-font-size-t3, 0.8125rem);
+  font-weight: var(--seed-font-weight-bold, 700);
+  border: 1px solid var(--gamza-border, #eeeff1);
+  background-color: #ffffff;
+  color: var(--gamza-text-sub, #555d6d);
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.gamza-owner-status-btn:hover {
+  background-color: #f7f8f9;
+  border-color: #dcdee3;
+  color: var(--gamza-text-main, #1a1c20);
+}
+
+/* 상태 버튼 활성화 효과 */
+.gamza-owner-status-btn.status-selling.is-active {
+  background-color: #e6f7f2;
+  border-color: #079171;
+  color: #079171;
+  box-shadow: 0 2px 6px rgba(7, 145, 113, 0.2);
+}
+
+.gamza-owner-status-btn.status-reserved.is-active {
+  background-color: #fff2ec;
+  border-color: #e14d00;
+  color: #e14d00;
+  box-shadow: 0 2px 6px rgba(225, 77, 0, 0.2);
+}
+
+.gamza-owner-status-btn.status-completed.is-active {
+  background-color: #eeeff1;
+  border-color: #868b94;
+  color: #494e57;
+  box-shadow: 0 2px 6px rgba(134, 139, 148, 0.2);
+}
+
+/* --- 작성자 전용: 수정 / 삭제 버튼 그룹 --- */
+.gamza-modal-owner-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex: 1;
+}
+
+.gamza-owner-btn {
+  height: 48px;
+  border-radius: 14px;
+  font-size: var(--seed-font-size-t4, 0.875rem);
+  font-weight: var(--seed-font-weight-bold, 700);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  cursor: pointer;
+  transition: all 0.18s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.gamza-owner-btn svg {
+  flex-shrink: 0;
+}
+
+/* 수정 버튼 (주요 액션: 당근 오렌지) */
+.gamza-owner-edit-btn {
+  flex: 1;
+  background-color: var(--gamza-primary, #ff6600);
+  color: #ffffff;
+  border: none;
+  box-shadow: 0 4px 14px rgba(255, 102, 0, 0.28);
+}
+
+.gamza-owner-edit-btn:hover {
+  background-color: var(--gamza-primary-hover, #e14d00);
+  box-shadow: 0 6px 18px rgba(255, 102, 0, 0.36);
+  transform: translateY(-1px);
+}
+
+.gamza-owner-edit-btn:active {
+  transform: scale(0.98);
+}
+
+/* 삭제 버튼 (위험 액션: 부드러운 레드) */
+.gamza-owner-delete-btn {
+  flex: 0 0 100px;
+  background-color: #fdf0f0;
+  color: #fa342c;
+  border: 1.5px solid #fed4d2;
+}
+
+.gamza-owner-delete-btn:hover {
+  background-color: #fde7e7;
+  border-color: #feb7b3;
+  color: #d82019;
+  transform: translateY(-1px);
+}
+
+.gamza-owner-delete-btn:active {
+  transform: scale(0.98);
+}
+
+/* 7. SEED 반응형 (모바일 바텀 시트 & SEED 16px 내부 여백 체계) */
+@media (max-width: 767px) {
+  .gamza-modal-overlay {
+    padding: 0;
+    align-items: flex-end; /* 모바일에서는 하단 바텀 시트로 전환 */
+  }
+
+  .gamza-modal-container {
+    width: 100%;
+    max-width: 100%;
+    max-height: 90vh;
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+    border-top-left-radius: 24px;
+    border-top-right-radius: 24px;
+    transform: translateY(100%);
+  }
+
+  .gamza-modal-overlay.is-active .gamza-modal-container {
+    transform: translateY(0);
+  }
+
+  /* 모바일 상단 드래그 핸들 바 */
+  .gamza-modal-container::before {
+    content: '';
+    position: absolute;
+    top: 8px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 38px;
+    height: 4px;
+    border-radius: 99px;
+    background-color: rgba(255, 255, 255, 0.7);
+    z-index: 25;
+  }
+
+  .gamza-modal-close-btn {
+    top: 16px;
+    right: 16px;
+  }
+
+  .gamza-modal-image-wrapper {
+    aspect-ratio: 4 / 3;
+  }
+
+  .gamza-modal-body {
+    padding: 18px var(--seed-margin-mobile, 16px) 14px;
+  }
+
+  .gamza-seller-section {
+    margin: 0 var(--seed-margin-mobile, 16px) 16px;
+    padding: 12px 14px;
+  }
+
+  .gamza-modal-action-bar {
+    padding: 12px var(--seed-margin-mobile, 16px);
+    padding-bottom: calc(12px + env(safe-area-inset-bottom, 0px));
+  }
+}

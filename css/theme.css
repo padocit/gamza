@@ -1,0 +1,367 @@
+/* ==========================================================================
+   감자 마켓 공통 디자인 테마 변수 & Reset
+   Design Foundation: SEED Design System
+   - Color: https://seed-design.io/foundations/color
+   - Typography: https://seed-design.io/foundations/typography
+   ========================================================================== */
+
+@import url("https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css");
+
+:root {
+  /* ==========================================================================
+     SEED Design Foundation Color Tokens
+     ========================================================================== */
+
+  /* SEED Palette - Gray */
+  --seed-gray-00: #ffffff;
+  --seed-gray-100: #f7f8f9;
+  --seed-gray-200: #f3f4f5;
+  --seed-gray-300: #eeeff1;
+  --seed-gray-400: #dcdee3;
+  --seed-gray-500: #d1d3d8;
+  --seed-gray-600: #b0b3ba;
+  --seed-gray-700: #868b94;
+  --seed-gray-800: #555d6d;
+  --seed-gray-900: #2a3038;
+  --seed-gray-1000: #1a1c20;
+
+  /* SEED Palette - Carrot (Brand) */
+  --seed-carrot-100: #fff2ec;
+  --seed-carrot-200: #ffe8db;
+  --seed-carrot-300: #ffd5c0;
+  --seed-carrot-400: #ffb999;
+  --seed-carrot-500: #ff9364;
+  --seed-carrot-600: #ff6600;
+  --seed-carrot-700: #e14d00;
+  --seed-carrot-800: #b93901;
+  --seed-carrot-900: #862b00;
+  --seed-carrot-1000: #471601;
+
+  /* SEED Palette - Green (Positive) */
+  --seed-green-100: #edfaf6;
+  --seed-green-200: #d9f6e9;
+  --seed-green-300: #b9e9d2;
+  --seed-green-400: #7ddcb3;
+  --seed-green-500: #42c593;
+  --seed-green-600: #10ab7d;
+  --seed-green-700: #079171;
+  --seed-green-800: #00745f;
+  --seed-green-900: #075445;
+
+  /* SEED Palette - Red (Critical) */
+  --seed-red-100: #fdf0f0;
+  --seed-red-200: #fde7e7;
+  --seed-red-300: #fed4d2;
+  --seed-red-400: #feb7b3;
+  --seed-red-500: #fe928d;
+  --seed-red-600: #fc6a66;
+  --seed-red-700: #fa342c;
+  --seed-red-800: #ca1d13;
+  --seed-red-900: #921708;
+
+  /* SEED Palette - Yellow (Warning) */
+  --seed-yellow-100: #fff7de;
+  --seed-yellow-200: #fdefb9;
+  --seed-yellow-300: #fbdc65;
+  --seed-yellow-400: #e9c647;
+  --seed-yellow-700: #9b7821;
+  --seed-yellow-800: #755b22;
+  --seed-yellow-900: #4f3e1f;
+
+  /* SEED Palette - Blue (Informative) */
+  --seed-blue-100: #eff6ff;
+  --seed-blue-200: #e2edfc;
+  --seed-blue-300: #cbdffa;
+  --seed-blue-600: #5e98fe;
+  --seed-blue-700: #217cf9;
+  --seed-blue-800: #135fcd;
+
+  /* SEED Role-based Semantic Tokens */
+  --seed-color-fg-brand: var(--seed-carrot-600);
+  --seed-color-fg-brand-contrast: var(--seed-carrot-700);
+  --seed-color-fg-neutral: var(--seed-gray-1000);
+  --seed-color-fg-neutral-muted: var(--seed-gray-800);
+  --seed-color-fg-neutral-subtle: var(--seed-gray-700);
+  --seed-color-fg-placeholder: var(--seed-gray-600);
+  --seed-color-fg-disabled: var(--seed-gray-500);
+  --seed-color-fg-on-brand-solid: #ffffff;
+  --seed-color-fg-on-neutral-solid: #ffffff;
+  --seed-color-fg-positive: var(--seed-green-700);
+  --seed-color-fg-critical: var(--seed-red-700);
+  --seed-color-fg-warning: var(--seed-yellow-700);
+  --seed-color-fg-informative: var(--seed-blue-700);
+
+  --seed-color-bg-layer-basement: var(--seed-gray-100);
+  --seed-color-bg-layer-default: var(--seed-gray-00);
+  --seed-color-bg-layer-floating: var(--seed-gray-00);
+  --seed-color-bg-neutral-muted: var(--seed-gray-100);
+  --seed-color-bg-neutral-weak: var(--seed-gray-200);
+  --seed-color-bg-neutral-solid: var(--seed-gray-900);
+  --seed-color-bg-brand-solid: var(--seed-carrot-600);
+  --seed-color-bg-brand-solid-pressed: var(--seed-carrot-700);
+  --seed-color-bg-brand-weak: var(--seed-carrot-100);
+  --seed-color-bg-brand-weak-pressed: var(--seed-carrot-200);
+  --seed-color-bg-positive-weak: var(--seed-green-100);
+  --seed-color-bg-positive-solid: var(--seed-green-700);
+  --seed-color-bg-critical-weak: var(--seed-red-100);
+  --seed-color-bg-critical-solid: var(--seed-red-700);
+  --seed-color-bg-warning-weak: var(--seed-yellow-100);
+  --seed-color-bg-warning-solid: var(--seed-yellow-300);
+  --seed-color-bg-disabled: var(--seed-gray-200);
+  --seed-color-bg-overlay: rgba(0, 0, 0, 0.45);
+
+  --seed-color-stroke-neutral-subtle: var(--seed-gray-300);
+  --seed-color-stroke-neutral-weak: var(--seed-gray-400);
+  --seed-color-stroke-neutral-muted: var(--seed-gray-600);
+  --seed-color-stroke-brand-solid: var(--seed-carrot-600);
+  --seed-color-stroke-brand-weak: var(--seed-carrot-300);
+  --seed-color-stroke-focus-ring: var(--seed-carrot-600);
+
+  /* ==========================================================================
+     SEED Design Foundation Typography Tokens
+     https://seed-design.io/foundations/typography
+     ========================================================================== */
+
+  /* SEED Font Family (Windows/Web: Pretendard First) */
+  --seed-font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Apple SD Gothic Neo", "Segoe UI", Roboto, sans-serif;
+
+  /* SEED Font Size Tokens (Scale - Rem) */
+  --seed-font-size-t1: 0.6875rem; /* 11px */
+  --seed-font-size-t2: 0.75rem;   /* 12px */
+  --seed-font-size-t3: 0.8125rem; /* 13px */
+  --seed-font-size-t4: 0.875rem;  /* 14px */
+  --seed-font-size-t5: 1rem;      /* 16px - Base */
+  --seed-font-size-t6: 1.125rem;  /* 18px */
+  --seed-font-size-t7: 1.25rem;   /* 20px */
+  --seed-font-size-t8: 1.375rem;  /* 22px */
+  --seed-font-size-t9: 1.5rem;    /* 24px */
+  --seed-font-size-t10: 1.625rem; /* 26px */
+  --seed-font-size-t11: 1.75rem;  /* 28px */
+  --seed-font-size-t12: 2rem;     /* 32px */
+  --seed-font-size-t13: 2.5rem;   /* 40px */
+  --seed-font-size-t14: 3rem;     /* 48px */
+
+  /* SEED Font Size Tokens (Static - Px) */
+  --seed-font-size-t1-static: 11px;
+  --seed-font-size-t2-static: 12px;
+  --seed-font-size-t3-static: 13px;
+  --seed-font-size-t4-static: 14px;
+  --seed-font-size-t5-static: 16px;
+  --seed-font-size-t6-static: 18px;
+  --seed-font-size-t7-static: 20px;
+  --seed-font-size-t8-static: 22px;
+  --seed-font-size-t9-static: 24px;
+  --seed-font-size-t10-static: 26px;
+  --seed-font-size-t11-static: 28px;
+  --seed-font-size-t12-static: 32px;
+  --seed-font-size-t13-static: 40px;
+  --seed-font-size-t14-static: 48px;
+
+  /* SEED Line Height Tokens (Scale - Rem) */
+  --seed-line-height-t1: 0.9375rem; /* 15px */
+  --seed-line-height-t2: 1rem;      /* 16px */
+  --seed-line-height-t3: 1.125rem;  /* 18px */
+  --seed-line-height-t4: 1.1875rem; /* 19px */
+  --seed-line-height-t5: 1.375rem;  /* 22px */
+  --seed-line-height-t6: 1.5rem;    /* 24px */
+  --seed-line-height-t7: 1.6875rem; /* 27px */
+  --seed-line-height-t8: 1.875rem;  /* 30px */
+  --seed-line-height-t9: 2rem;      /* 32px */
+  --seed-line-height-t10: 2.1875rem;/* 35px */
+  --seed-line-height-t11: 2.375rem; /* 38px */
+  --seed-line-height-t12: 2.625rem; /* 42px */
+  --seed-line-height-t13: 3.25rem;  /* 52px */
+  --seed-line-height-t14: 3.75rem;  /* 60px */
+
+  /* SEED Line Height Tokens (Static - Px) */
+  --seed-line-height-t1-static: 15px;
+  --seed-line-height-t2-static: 16px;
+  --seed-line-height-t3-static: 18px;
+  --seed-line-height-t4-static: 19px;
+  --seed-line-height-t5-static: 22px;
+  --seed-line-height-t6-static: 24px;
+  --seed-line-height-t7-static: 27px;
+  --seed-line-height-t8-static: 30px;
+  --seed-line-height-t9-static: 32px;
+  --seed-line-height-t10-static: 35px;
+  --seed-line-height-t11-static: 38px;
+  --seed-line-height-t12-static: 42px;
+  --seed-line-height-t13-static: 52px;
+  --seed-line-height-t14-static: 60px;
+
+  /* SEED Font Weight Tokens */
+  --seed-font-weight-regular: 400;
+  --seed-font-weight-medium: 500;
+  --seed-font-weight-bold: 700;
+
+  /* SEED Semantic Typography Presets */
+  --seed-typography-screen-title-size: var(--seed-font-size-t10);
+  --seed-typography-screen-title-line-height: var(--seed-line-height-t10);
+  --seed-typography-screen-title-weight: var(--seed-font-weight-bold);
+
+  --seed-typography-article-body-size: var(--seed-font-size-t5);
+  --seed-typography-article-body-line-height: var(--seed-line-height-t6);
+  --seed-typography-article-body-weight: var(--seed-font-weight-regular);
+
+  --seed-typography-article-note-size: var(--seed-font-size-t4);
+  --seed-typography-article-note-line-height: var(--seed-line-height-t5);
+  --seed-typography-article-note-weight: var(--seed-font-weight-regular);
+
+  /* ==========================================================================
+     UI Component Mapping Variables (Compatibility with existing Gamza styles)
+     ========================================================================== */
+
+  /* Brand Theme Colors (SEED Carrot) */
+  --color-primary: var(--seed-carrot-600);          /* #ff6600 당근 시그니처 오렌지 */
+  --color-primary-dark: var(--seed-carrot-700);     /* #e14d00 진한 오렌지 (호버용) */
+  --color-primary-light: var(--seed-carrot-500);    /* #ff9364 밝은 오렌지 */
+  --color-secondary: var(--seed-carrot-100);        /* #fff2ec 은은한 당근 배경 틴트 */
+  --color-bg: var(--seed-gray-100);                 /* #f7f8f9 모던하고 깔끔한 라이트 그레이 */
+  --color-card-bg: #ffffff;                         /* 화이트 카드 */
+  --color-border: var(--seed-gray-300);             /* #eeeff1 기본 경계선 */
+  --color-border-hover: var(--seed-gray-400);       /* #dcdee3 호버 경계선 */
+
+  /* Point / Accent Colors (SEED Carrot Brand) */
+  --color-point: var(--seed-carrot-600);            /* #ff6600 메인 액션/포인트 */
+  --color-point-hover: var(--seed-carrot-700);      /* #e14d00 액션 호버 */
+  --color-point-active: var(--seed-carrot-800);     /* #b93901 액티브 */
+  --color-point-light: var(--seed-carrot-100);      /* #fff2ec 연한 배경 하이라이트 */
+  --color-point-border: var(--seed-carrot-300);     /* #ffd5c0 소프트 오렌지 보더 */
+  --color-point-text: #ffffff;                      /* 포인트 버튼 위 텍스트 */
+  --color-point-deep: var(--seed-carrot-700);       /* #e14d00 뱃지/강조 텍스트 */
+  --shadow-point: 0 3px 12px rgba(255, 102, 0, 0.28);
+  --shadow-point-lg: 0 6px 20px rgba(255, 102, 0, 0.38);
+
+  /* Typography Colors */
+  --color-text-main: var(--seed-gray-1000);         /* #1a1c20 본문 메인 블랙 */
+  --color-text-sub: var(--seed-gray-800);           /* #555d6d 서브 텍스트 */
+  --color-text-muted: var(--seed-gray-700);         /* #868b94 뮤트/설명 텍스트 */
+
+  /* Status Colors */
+  --color-status-selling: var(--seed-green-700);    /* #079171 판매중 - 그린 */
+  --color-status-selling-bg: var(--seed-green-100); /* #edfaf6 */
+  --color-status-reserved: var(--seed-carrot-700);  /* #e14d00 예약중 - 오렌지 */
+  --color-status-reserved-bg: var(--seed-carrot-100); /* #fff2ec */
+  --color-status-completed: var(--seed-gray-700);   /* #868b94 거래 완료 - 뉴트럴 그레이 */
+  --color-status-completed-bg: var(--seed-gray-200);/* #f3f4f5 */
+
+  /* UI Shadows & Transitions (Clean Neutral Shadows) */
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.08);
+  --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.12);
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  --radius-full: 9999px;
+  --transition-fast: 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-smooth: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+
+  /* ==========================================================================
+     SEED Design Foundation Feedback Tokens
+     https://seed-design.io/foundations/feedback
+     - Color: https://seed-design.io/foundations/feedback/color
+     - Scale: https://seed-design.io/foundations/feedback/scale
+     ========================================================================== */
+
+  /* Duration & Timing Tokens ($duration.d3 = 150ms 동기화) */
+  --seed-duration-feedback: 150ms;
+  --seed-duration-color-transition: var(--seed-duration-feedback);
+  --seed-duration-pressed-scale: var(--seed-duration-feedback);
+  --seed-timing-feedback: cubic-bezier(0.2, 0, 0, 1);
+
+  /* Scale Tokens (공식 계산식: basis = max(height, width/4, 24), scale = (basis - 2) / basis) */
+  --seed-scale-pressed-icon: 0.938; /* 32px 아이콘 버튼 (30/32 = 0.9375 ≈ 0.938) */
+  --seed-scale-pressed-chip: 0.95;  /* 36px~40px 칩 및 작은 버튼 (38/40 = 0.95) */
+  --seed-scale-pressed-btn: 0.96;   /* 44px~52px 기본 액션 버튼 (48/50 ~ 0.96) */
+  --seed-scale-pressed-wide: 0.98;  /* 가로로 긴 풀위스 버튼 */
+  --seed-scale-pressed-card: 0.985; /* 상품 카드 */
+
+  /* Pressed Semantic Tokens */
+  --seed-color-bg-neutral-weak-pressed: var(--seed-gray-300);
+  --seed-color-bg-neutral-solid-pressed: var(--seed-gray-800);
+  --seed-color-bg-layer-default-pressed: var(--seed-gray-100);
+  --seed-color-bg-layer-floating-pressed: var(--seed-gray-100);
+  --seed-color-bg-transparent-pressed: rgba(0, 0, 0, 0.04);
+  --seed-color-bg-critical-weak-pressed: var(--seed-red-200);
+
+  /* ==========================================================================
+     SEED Design Foundation Layout & Grid Tokens
+     https://seed-design.io/foundations/layout
+     ========================================================================== */
+
+  /* Breakpoint Tokens (Mobile First) */
+  --seed-breakpoint-base: 0px;
+  --seed-breakpoint-sm: 480px;
+  --seed-breakpoint-md: 768px;
+  --seed-breakpoint-lg: 1280px;
+  --seed-breakpoint-xl: 1440px;
+
+  /* Layout Max-width Tokens (Contents Layout Specs) */
+  --seed-layout-content-max-width: 1040px;  /* Standard Contents Layout */
+  --seed-layout-commerce-max-width: 1280px; /* Commerce Search Grid Max-width */
+  --seed-layout-dialog-low-max-width: 720px; /* Low Density Centered / Dialog */
+  --seed-layout-dialog-detail-max-width: 800px; /* Detail Modal Max-width */
+
+  /* Gutters & Margins Tokens */
+  --seed-gutter-mobile: 16px;
+  --seed-gutter-desktop: 24px;
+  --seed-margin-mobile: 16px;
+  --seed-margin-desktop: 32px;
+
+  /* Layout Regions */
+  --seed-header-height: 64px;
+
+  /* Compatibility Mapping with Gamza Core */
+  --header-height: var(--seed-header-height);
+  --max-width: var(--seed-layout-commerce-max-width);
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: var(--seed-font-family);
+  font-size: var(--seed-font-size-t5);
+  line-height: var(--seed-line-height-t5);
+  font-weight: var(--seed-font-weight-regular);
+  background-color: var(--color-bg);
+  color: var(--color-text-main);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+button {
+  font-family: inherit;
+  cursor: pointer;
+  border: none;
+  background: none;
+}
+
+input {
+  font-family: inherit;
+  border: none;
+  outline: none;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+/* ==========================================================================
+   SEED Accessibility - Reduce Motion
+   OS의 동작 줄이기 설정이 켜져 있을 때 transform을 끄고 색 전환 피드백만 남기는 SEED 원칙 준수
+   https://seed-design.io/foundations/feedback/scale#accessibility
+   ========================================================================== */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    transform: none !important;
+  }
+}
+

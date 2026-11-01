@@ -1,0 +1,468 @@
+/* ==========================================================================
+   감자 마켓 - 인증 모달(로그인/회원가입) & 헤더 유저 UI 스타일 (authModal.css)
+   ========================================================================== */
+
+/* --- 1. 헤더 우측 로그인/유저 상태 버튼 --- */
+.user-auth-wrap {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.user-nickname-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background-color: var(--color-secondary, #fff5ed);
+  border: 1.5px solid rgba(255, 102, 0, 0.25);
+  border-radius: var(--radius-full, 9999px);
+  padding: 6px 14px 6px 10px;
+  font-size: var(--seed-font-size-t4, 0.9375rem);
+  font-weight: var(--seed-font-weight-bold, 700);
+  color: var(--color-primary, #ff6600);
+  box-shadow: 0 1px 3px rgba(255, 102, 0, 0.08);
+  user-select: none;
+  transition: transform 0.15s ease, background-color 0.15s ease;
+}
+
+.user-nickname-badge:hover {
+  background-color: #ffeedf;
+  transform: translateY(-1px);
+}
+
+.user-nickname-badge .user-avatar-mini {
+  font-size: 1.15rem;
+  line-height: 1;
+  display: flex;
+  align-items: center;
+  filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.1));
+}
+
+.user-nickname-text {
+  max-width: 140px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-weight: 700;
+  color: #374151;
+}
+
+.user-nickname-text::after {
+  content: " 님";
+  font-weight: 500;
+  color: #6b7280;
+  font-size: 0.875rem;
+}
+
+.btn-logout {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px 16px;
+  border: 1px solid var(--color-border, #e5e7eb);
+  border-radius: var(--radius-full, 9999px);
+  font-size: var(--seed-font-size-t4, 0.9375rem);
+  line-height: var(--seed-line-height-t4, 1.35);
+  font-weight: var(--seed-font-weight-medium, 500);
+  color: var(--color-text-sub, #4b5563);
+  background-color: #ffffff;
+  cursor: pointer;
+  transition: all var(--transition-fast, 0.15s ease);
+}
+
+.btn-logout:hover {
+  border-color: #d1d5db;
+  color: #111827;
+  background-color: #f9fafb;
+}
+
+.btn-logout:active {
+  transform: scale(0.96);
+  background-color: #f3f4f6;
+}
+
+/* 카드 목록의 작성자 닉네임 */
+.card-seller-name {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  color: var(--color-primary, #ff6600);
+  font-weight: 600;
+  max-width: 120px;
+}
+
+.card-seller-name .seller-icon {
+  font-size: 0.9rem;
+}
+
+.card-seller-name .seller-nickname {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* --- 2. 인증 모달 오버레이 & 컨테이너 --- */
+.gamza-auth-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 1050;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: rgba(0, 0, 0, 0.55);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  padding: 20px;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.25s cubic-bezier(0.16, 1, 0.3, 1),
+              visibility 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.gamza-auth-overlay.is-active {
+  opacity: 1;
+  visibility: visible;
+}
+
+.gamza-auth-container {
+  position: relative;
+  width: 100%;
+  max-width: 440px;
+  background-color: #ffffff;
+  border-radius: 24px;
+  box-shadow: 0 20px 45px -10px rgba(0, 0, 0, 0.2), 0 0 0 1px rgba(0, 0, 0, 0.04);
+  padding: 32px 28px;
+  overflow: hidden;
+  transform: scale(0.94) translateY(12px);
+  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.gamza-auth-overlay.is-active .gamza-auth-container {
+  transform: scale(1) translateY(0);
+}
+
+/* 닫기 버튼 */
+.gamza-auth-close-btn {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: none;
+  background-color: #f3f4f6;
+  color: #6b7280;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.gamza-auth-close-btn:hover {
+  background-color: #e5e7eb;
+  color: #111827;
+  transform: rotate(90deg);
+}
+
+.gamza-auth-close-btn:active {
+  transform: scale(0.92) rotate(90deg);
+}
+
+/* 모달 헤더 */
+.gamza-auth-header {
+  text-align: center;
+  margin-bottom: 24px;
+}
+
+.gamza-auth-logo-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 56px;
+  height: 56px;
+  background: linear-gradient(135deg, #fff3ea 0%, #ffe4cc 100%);
+  border-radius: 18px;
+  font-size: 2rem;
+  margin-bottom: 12px;
+  box-shadow: 0 6px 16px rgba(255, 102, 0, 0.15);
+}
+
+.gamza-auth-title {
+  font-size: 1.4rem;
+  font-weight: 800;
+  color: #111827;
+  margin: 0 0 6px;
+  letter-spacing: -0.5px;
+}
+
+.gamza-auth-subtitle {
+  font-size: 0.9rem;
+  color: #6b7280;
+  margin: 0;
+  line-height: 1.4;
+}
+
+/* 액션 유도 안내 배너 (예: 글쓰기 시도 시) */
+.gamza-auth-prompt-banner {
+  display: none;
+  align-items: center;
+  gap: 8px;
+  background-color: #fff8f1;
+  border: 1px solid #ffcc99;
+  border-radius: 12px;
+  padding: 10px 14px;
+  margin-bottom: 20px;
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: #d9480f;
+  animation: bannerFadeIn 0.3s ease;
+}
+
+.gamza-auth-prompt-banner.visible {
+  display: flex;
+}
+
+@keyframes bannerFadeIn {
+  from { opacity: 0; transform: translateY(-6px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* 탭 네비게이션 */
+.gamza-auth-tabs {
+  display: flex;
+  background-color: #f3f4f6;
+  border-radius: 14px;
+  padding: 4px;
+  margin-bottom: 24px;
+  position: relative;
+}
+
+.gamza-auth-tab {
+  flex: 1;
+  padding: 10px 16px;
+  border: none;
+  border-radius: 10px;
+  background-color: transparent;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #6b7280;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-align: center;
+}
+
+.gamza-auth-tab.active {
+  background-color: #ffffff;
+  color: var(--color-primary, #ff6600);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  font-weight: 700;
+}
+
+/* 폼 그룹 및 인풋 */
+.gamza-auth-form-panel {
+  display: none;
+}
+
+.gamza-auth-form-panel.active {
+  display: block;
+  animation: panelFade 0.25s ease;
+}
+
+@keyframes panelFade {
+  from { opacity: 0; transform: translateY(4px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.gamza-auth-group {
+  margin-bottom: 16px;
+}
+
+.gamza-auth-label {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #374151;
+  margin-bottom: 6px;
+}
+
+.gamza-auth-required {
+  color: #ef4444;
+  margin-left: 2px;
+}
+
+.gamza-auth-tag {
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: #ff6600;
+  background-color: #fff3ea;
+  padding: 2px 6px;
+  border-radius: 4px;
+}
+
+.gamza-auth-input-wrap {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.gamza-auth-input {
+  width: 100%;
+  padding: 12px 14px;
+  border: 1.5px solid #e5e7eb;
+  border-radius: 12px;
+  font-size: 0.95rem;
+  color: #111827;
+  background-color: #ffffff;
+  transition: all 0.15s ease;
+  box-sizing: border-box;
+}
+
+.gamza-auth-input:focus {
+  outline: none;
+  border-color: var(--color-point, #ff6600);
+  box-shadow: 0 0 0 3px rgba(255, 102, 0, 0.18);
+}
+
+.gamza-auth-input::placeholder {
+  color: #9ca3af;
+  font-size: 0.9rem;
+}
+
+/* 에러 메시지 */
+.gamza-auth-error {
+  display: none;
+  margin-top: 6px;
+  font-size: 0.82rem;
+  font-weight: 500;
+  color: #dc2626;
+  align-items: center;
+  gap: 4px;
+}
+
+.gamza-auth-error.visible {
+  display: flex;
+}
+
+.gamza-auth-global-error {
+  display: none;
+  background-color: #fef2f2;
+  border: 1px solid #fecaca;
+  color: #b91c1c;
+  padding: 10px 14px;
+  border-radius: 10px;
+  font-size: 0.85rem;
+  margin-bottom: 16px;
+  line-height: 1.4;
+}
+
+.gamza-auth-global-error.visible {
+  display: block;
+}
+
+/* 제출 버튼 */
+.gamza-auth-submit-btn {
+  width: 100%;
+  padding: 14px 20px;
+  background-color: var(--color-point, #ff6600);
+  color: #ffffff;
+  border: none;
+  border-radius: 14px;
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 20px;
+  box-shadow: 0 4px 14px rgba(255, 102, 0, 0.35);
+  transition: all 0.15s ease;
+}
+
+.gamza-auth-submit-btn:hover {
+  background-color: var(--color-point-hover, #e65c00);
+  transform: translateY(-1px);
+  box-shadow: 0 6px 18px rgba(255, 102, 0, 0.42);
+}
+
+.gamza-auth-submit-btn:active {
+  transform: scale(0.98);
+}
+
+.gamza-auth-submit-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none !important;
+}
+
+/* 하단 탭 전환 링크 */
+.gamza-auth-switch-text {
+  text-align: center;
+  margin-top: 18px;
+  font-size: 0.88rem;
+  color: #6b7280;
+}
+
+.gamza-auth-switch-link {
+  color: var(--color-primary, #ff6600);
+  font-weight: 700;
+  cursor: pointer;
+  text-decoration: underline;
+  margin-left: 4px;
+}
+
+.gamza-auth-switch-link:hover {
+  color: #cc5200;
+}
+
+/* --- 3. 감자 토스트 알림 --- */
+.gamza-toast-container {
+  position: fixed;
+  bottom: 28px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 2000;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  pointer-events: none;
+}
+
+.gamza-toast {
+  pointer-events: auto;
+  background-color: #1f2937;
+  color: #ffffff;
+  padding: 12px 22px;
+  border-radius: 9999px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3);
+  animation: toastPop 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  max-width: 90vw;
+}
+
+.gamza-toast.toast-success {
+  background-color: #111827;
+  border-left: 4px solid #ff6600;
+}
+
+.gamza-toast.toast-error {
+  background-color: #991b1b;
+}
+
+@keyframes toastPop {
+  from {
+    opacity: 0;
+    transform: translateY(20px) scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
