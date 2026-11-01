@@ -52,21 +52,30 @@ gamza/
 ├── css/
 │   ├── theme.css           # 전역 CSS 변수 및 디자인 시스템
 │   ├── productList.css     # 메인 상품 목록 스타일
+│   ├── detailModal.css     # 상품 상세 팝업 모달 스타일
 │   ├── writeModal.css      # 상품 등록/수정 모달 스타일
 │   └── authModal.css       # 로그인/회원가입 모달 스타일
 ├── js/
 │   ├── supabaseClient.js   # Supabase 클라이언트 및 DB/인증 API 모듈
 │   ├── productList.js      # 상품 목록 렌더링 및 필터링 컨트롤러
+│   ├── detailModal.js      # 상품 상세 모달 제어 로직
 │   ├── writeModal.js       # 글쓰기/수정 모달 제어 로직
 │   └── authModal.js        # 회원가입/로그인 모달 제어 로직
 ├── data/
 │   └── productsData.js     # 초기/대체 목업 데이터
-├── detail-modal.css        # 상세 모달 스타일
-├── detail-modal.js         # 상세 모달 제어 로직
-├── index.html              # 메인 애플리케이션 진입점
+├── docs/                   # 컴포넌트별 개발 문서 및 템플릿/데모
+│   ├── README_PRODUCT_LIST.md # 상품 목록 컴포넌트 상세 문서
+│   ├── README_WRITE_MODAL.md  # 글쓰기 모달 컴포넌트 상세 문서
+│   ├── templates/          # 모달 HTML 템플릿 조각
+│   │   ├── detail-modal.html
+│   │   └── write-modal.html
+│   └── demos/              # 모듈별 독립 실행 테스트 데모
+│       ├── detail-modal-demo.html
+│       └── write-modal-demo.html
+├── index.html              # 감자 마켓 메인 애플리케이션 진입점
 ├── .env.example            # 환경 변수 템플릿 파일
 ├── .gitignore              # Git 무시 파일 목록 (보안 키 파일 격리)
-└── README.md               # 프로젝트 안내 문서
+└── README.md               # 프로젝트 종합 안내 문서
 ```
 
 ---

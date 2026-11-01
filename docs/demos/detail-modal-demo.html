@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>감자 마켓 - 상세 팝업(모달) 데모</title>
-  <link rel="stylesheet" href="detail-modal.css" />
+  <link rel="stylesheet" href="../../css/detailModal.css" />
   <style>
     * { box-sizing: border-box; }
     body {
@@ -150,10 +150,10 @@
   <!-- 화면 2 모달 템플릿 포함 -->
   <div id="modalContainer"></div>
 
-  <script src="detail-modal.js"></script>
+  <script src="../../js/detailModal.js"></script>
   <script>
     // 모달 HTML 동적 로드 (또는 인라인 포함)
-    fetch('detail-modal.html')
+    fetch('../templates/detail-modal.html')
       .then(res => res.text())
       .then(html => {
         document.getElementById('modalContainer').innerHTML = html;
