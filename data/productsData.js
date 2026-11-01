@@ -127,6 +127,27 @@ export const dummyProducts = [
     },
     likes: 31,
     chats: 11
+  },
+  {
+    id: 7,
+    title: "강아지 원목 식기 2구 & 푹신한 마약방석 세트 (소형견용)",
+    category: "반려동물 용품",
+    price: 25000,
+    location: "서울 강남구 역삼동",
+    timeAgo: "6시간 전",
+    status: "selling",
+    statusText: "판매중",
+    image: "https://images.unsplash.com/photo-1543466835-00a7907e9de1?w=600&auto=format&fit=crop&q=80",
+    description: "우리 강아지가 다른 방석만 써서 보관만 하던 새상품급 방석과 원목 2구 식기입니다. 세척 및 소독 완료했습니다. 소형견 키우시는 분 데려가세요!",
+    seller: {
+      name: "감자멍멍이",
+      nickname: "감자멍멍이",
+      temperature: 40.2,
+      location: "강남구 역삼동",
+      avatar: "https://api.dicebear.com/7.x/bottts/svg?seed=potato7"
+    },
+    likes: 14,
+    chats: 5
   }
 ];
 
@@ -137,5 +158,6 @@ export const categories = [
   "의류",
   "생활가전",
   "도서/티켓",
+  "반려동물 용품",
   "기타"
 ];

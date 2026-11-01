@@ -215,6 +215,10 @@
                   <img src="https://images.unsplash.com/photo-1512820790803-83ca734da794?w=100&auto=format&fit=crop&q=80" alt="도서 샘플" />
                   <span>도서</span>
                 </button>
+                <button type="button" class="gamza-sample-chip" data-img="https://images.unsplash.com/photo-1543466835-00a7907e9de1?w=600&auto=format&fit=crop&q=80">
+                  <img src="https://images.unsplash.com/photo-1543466835-00a7907e9de1?w=100&auto=format&fit=crop&q=80" alt="반려동물 샘플" />
+                  <span>반려동물</span>
+                </button>
               </div>
             </div>
             <p class="gamza-form-error" id="error-image">상품 이미지를 등록하거나 샘플을 선택해주세요.</p>
@@ -239,6 +243,7 @@
                 <option value="의류">의류</option>
                 <option value="생활가전">생활가전</option>
                 <option value="도서/티켓">도서/티켓</option>
+                <option value="반려동물 용품">반려동물 용품</option>
                 <option value="기타">기타</option>
               </select>
               <span class="gamza-select-arrow">
@@ -426,7 +431,7 @@
 
   <!-- [화면 1] 상품 목록 앱 초기화 및 Supabase 실시간 DB 연동 스크립트 -->
   <script type="module">
-    import { ProductListApp } from "./js/productList.js";
+    import { ProductListApp } from "./js/productList.js?v=20261102_2";
     import {
       fetchProducts,
       createProduct,

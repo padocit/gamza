@@ -4,13 +4,40 @@
  * ==========================================================================
  */
 
-import { dummyProducts, categories } from "../data/productsData.js";
+import { dummyProducts, categories as rawCategories } from "../data/productsData.js?v=20261102_2";
+
+export const DEFAULT_CATEGORIES = [
+  "전체",
+  "디지털기기",
+  "가구/인테리어",
+  "의류",
+  "생활가전",
+  "도서/티켓",
+  "반려동물 용품",
+  "기타"
+];
+
+const resolvedCategories = Array.isArray(rawCategories) && rawCategories.length > 0
+  ? [...rawCategories]
+  : [...DEFAULT_CATEGORIES];
+
+if (!resolvedCategories.includes("반려동물 용품")) {
+  const etcIdx = resolvedCategories.indexOf("기타");
+  if (etcIdx !== -1) {
+    resolvedCategories.splice(etcIdx, 0, "반려동물 용품");
+  } else {
+    resolvedCategories.push("반려동물 용품");
+  }
+}
+
+export const categories = resolvedCategories;
 
 export class ProductListApp {
   /**
    * @param {Object} options
    * @param {HTMLElement} [options.container] - 렌더링될 루트 컨테이너 (기본값 document.body)
    * @param {Array} [options.initialProducts] - 초기 상품 배열 (미지정시 dummyProducts)
+   * @param {Array} [options.categories] - 카테고리 목록 배열
    * @param {Function} [options.onCardClick] - 상품 카드 클릭 시 실행될 콜백 함수 (productId, product) => void
    * @param {Function} [options.onWriteClick] - [글쓰기] 버튼 클릭 시 실행될 콜백 함수 () => void
    * @param {Function} [options.onLoginClick] - [로그인] 버튼 클릭 시 실행될 콜백 함수 () => void
@@ -19,6 +46,7 @@ export class ProductListApp {
   constructor(options = {}) {
     this.container = options.container || document.getElementById("gamza-app");
     this.products = [...(options.initialProducts || dummyProducts)];
+    this.categories = options.categories || categories;
     this.onCardClick = options.onCardClick || this.defaultCardClickHandler;
     this.onWriteClick = options.onWriteClick || this.defaultWriteClickHandler;
     this.onLoginClick = options.onLoginClick || this.defaultLoginClickHandler;
@@ -196,7 +224,7 @@ export class ProductListApp {
     const { categoryList } = this.dom;
     if (!categoryList) return;
 
-    categoryList.innerHTML = categories
+    categoryList.innerHTML = this.categories
       .map(
         (cat) => `
         <button 

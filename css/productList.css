@@ -233,16 +233,10 @@
 
 .category-list {
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
   gap: 10px;
-  overflow-x: auto;
   padding: 4px 2px 12px;
-  scrollbar-width: none; /* Firefox */
-  -ms-overflow-style: none; /* IE, Edge */
-}
-
-.category-list::-webkit-scrollbar {
-  display: none; /* Chrome, Safari */
 }
 
 .category-btn {
