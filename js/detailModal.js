@@ -113,17 +113,30 @@
         e.stopPropagation();
         if (!currentProduct) return;
 
+        // 상세 모달 닫기
+        closeDetailModal();
+
         // 커스텀 이벤트 발행
         const event = new CustomEvent('gamza:start-chat', {
           detail: {
             productId: currentProduct.id,
             productTitle: currentProduct.title,
-            seller: currentProduct.seller
+            seller: currentProduct.seller,
+            product: currentProduct
           }
         });
         window.dispatchEvent(event);
 
-        // 기본 안내 피드백 (연동 전 프리뷰)
+        // 전역 함수 직접 호출도 지원
+        if (typeof window.openChatRoom === "function") {
+          window.openChatRoom({
+            productId: currentProduct.id,
+            productTitle: currentProduct.title,
+            seller: currentProduct.seller,
+            product: currentProduct
+          });
+        }
+
         console.log(`[감자톡] '${currentProduct.title}' 판매자(${currentProduct.seller?.nickname || '판매자'})와의 채팅을 시작합니다.`);
       });
     }

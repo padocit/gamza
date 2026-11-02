@@ -49,6 +49,7 @@ export class ProductListApp {
     this.categories = options.categories || categories;
     this.onCardClick = options.onCardClick || this.defaultCardClickHandler;
     this.onWriteClick = options.onWriteClick || this.defaultWriteClickHandler;
+    this.onChatClick = options.onChatClick || this.defaultChatClickHandler;
     this.onLoginClick = options.onLoginClick || this.defaultLoginClickHandler;
     this.onLogoutClick = options.onLogoutClick || this.defaultLogoutClickHandler;
 
@@ -89,6 +90,11 @@ export class ProductListApp {
   defaultWriteClickHandler() {
     console.log("[감자 마켓] 글쓰기 버튼 클릭");
     window.dispatchEvent(new CustomEvent("gamza:writeClick"));
+  }
+
+  defaultChatClickHandler() {
+    console.log("[감자 마켓] 감자톡 버튼 클릭");
+    window.dispatchEvent(new CustomEvent("gamza:chatClick"));
   }
 
   /**
@@ -149,6 +155,14 @@ export class ProductListApp {
 
           <!-- 헤더 우측 액션 버튼 -->
           <div class="header-actions">
+            <!-- 감자톡 채팅 버튼 -->
+            <button class="btn-chat" id="btn-chat" title="감자톡 실시간 채팅">
+              <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+              </svg>
+              <span>감자톡</span>
+              <span class="chat-badge" id="chat-badge" style="display: none;">0</span>
+            </button>
             <button class="btn-write" id="btn-write" title="판매 상품 등록">
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
                 <line x1="12" y1="5" x2="12" y2="19"></line>
@@ -205,6 +219,8 @@ export class ProductListApp {
       searchInput: this.container.querySelector("#search-input"),
       searchClearBtn: this.container.querySelector("#search-clear-btn"),
       btnWrite: this.container.querySelector("#btn-write"),
+      btnChat: this.container.querySelector("#btn-chat"),
+      chatBadge: this.container.querySelector("#chat-badge"),
       btnLogin: this.container.querySelector("#btn-login"),
       userAuthWrap: this.container.querySelector("#user-auth-wrap"),
       userNicknameBadge: this.container.querySelector("#user-nickname-badge"),
@@ -484,6 +500,15 @@ export class ProductListApp {
       }
     });
 
+    // 8-1. 감자톡 채팅 버튼 클릭
+    if (this.dom.btnChat) {
+      this.dom.btnChat.addEventListener("click", () => {
+        if (this.onChatClick) {
+          this.onChatClick();
+        }
+      });
+    }
+
     // 9. 로그인 버튼 클릭 -> 로그인 모달 트리거
     if (btnLogin) {
       btnLogin.addEventListener("click", () => {
@@ -535,6 +560,22 @@ export class ProductListApp {
       if (userNicknameText) {
         userNicknameText.textContent = "";
       }
+    }
+  }
+
+  /**
+   * 상단 헤더 감자톡 미확인 메시지 배지 업데이트
+   * @param {number} count 안 읽은 메시지 수
+   */
+  setUnreadChatCount(count) {
+    const { chatBadge } = this.dom;
+    if (!chatBadge) return;
+
+    if (count > 0) {
+      chatBadge.textContent = count > 99 ? "99+" : String(count);
+      chatBadge.style.display = "inline-flex";
+    } else {
+      chatBadge.style.display = "none";
     }
   }
 

@@ -1,0 +1,676 @@
+/* ==========================================================================
+   감자 마켓 - 실시간 감자톡(채팅) 모달 스타일 (chatModal.css)
+   - 대화목록 화면 (Chat List Screen)
+   - 대화방 화면 (Chat Room Screen)
+   SEED Design Foundation 기반 테마 적용
+   ========================================================================== */
+
+/* 1. 모달 전체 오버레이 (디테일/글쓰기 모달과 통일된 구조) */
+.gamza-chat-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.55);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  z-index: 10050;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.24s ease, visibility 0.24s ease;
+  padding: 16px;
+  box-sizing: border-box;
+}
+
+.gamza-chat-modal-overlay.is-active {
+  opacity: 1;
+  visibility: visible;
+}
+
+/* 2. 모달 컨테이너 */
+.gamza-chat-modal-container {
+  position: relative;
+  width: 100%;
+  max-width: 520px;
+  height: 740px;
+  max-height: 90vh;
+  background-color: var(--seed-gray-00, #ffffff);
+  border-radius: 20px;
+  box-shadow: 0 24px 64px rgba(0, 0, 0, 0.24), 0 4px 16px rgba(0, 0, 0, 0.08);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  transform: translateY(24px) scale(0.97);
+  transition: transform 0.26s cubic-bezier(0.16, 1, 0.3, 1);
+  border: 1px solid var(--seed-gray-300, #eeeff1);
+}
+
+.gamza-chat-modal-overlay.is-active .gamza-chat-modal-container {
+  transform: translateY(0) scale(1);
+}
+
+/* 3. 공통 뷰 래퍼 */
+.gamza-chat-view {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  background-color: var(--seed-gray-100, #f7f8f9);
+}
+
+/* 4. 공통 헤더 */
+.gamza-chat-header {
+  height: 64px;
+  min-height: 64px;
+  background-color: var(--seed-gray-00, #ffffff);
+  border-bottom: 1px solid var(--seed-gray-200, #f3f4f5);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 18px;
+  flex-shrink: 0;
+  z-index: 10;
+}
+
+.gamza-chat-header-title-wrap {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.gamza-chat-logo-icon {
+  font-size: 1.6rem;
+  line-height: 1;
+}
+
+.gamza-chat-title {
+  margin: 0;
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--seed-gray-1000, #1a1c20);
+  line-height: 1.25;
+}
+
+.gamza-chat-subtitle {
+  margin: 0;
+  font-size: 0.76rem;
+  color: var(--seed-gray-600, #b0b3ba);
+}
+
+.gamza-chat-close-btn {
+  background: none;
+  border: none;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: var(--seed-gray-700, #868b94);
+  transition: background-color 0.15s ease, color 0.15s ease;
+}
+
+.gamza-chat-close-btn:hover {
+  background-color: var(--seed-gray-200, #f3f4f5);
+  color: var(--seed-gray-900, #2a3038);
+}
+
+/* ==========================================================================
+   [화면 A] 대화목록 화면 스타일
+   ========================================================================== */
+.gamza-chat-list-body {
+  flex: 1;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+}
+
+.gamza-chat-room-card {
+  display: flex;
+  align-items: center;
+  padding: 16px 18px;
+  background-color: var(--seed-gray-00, #ffffff);
+  border-bottom: 1px solid var(--seed-gray-200, #f3f4f5);
+  cursor: pointer;
+  transition: background-color 0.15s ease;
+  position: relative;
+  gap: 14px;
+}
+
+.gamza-chat-room-card:hover {
+  background-color: #fafbfc;
+}
+
+.gamza-card-avatar-wrap {
+  position: relative;
+  width: 52px;
+  height: 52px;
+  flex-shrink: 0;
+}
+
+.gamza-card-avatar {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  object-fit: cover;
+  background-color: var(--seed-carrot-100, #fff2ec);
+  border: 1px solid var(--seed-gray-200, #f3f4f5);
+}
+
+.gamza-card-info {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.gamza-card-top-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.gamza-card-name-wrap {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  min-width: 0;
+}
+
+.gamza-card-partner-name {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--seed-gray-1000, #1a1c20);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.gamza-card-temp-tag {
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: var(--seed-carrot-600, #ff6600);
+  background-color: var(--seed-carrot-100, #fff2ec);
+  padding: 1px 6px;
+  border-radius: 6px;
+  flex-shrink: 0;
+}
+
+.gamza-card-time {
+  font-size: 0.75rem;
+  color: var(--seed-gray-600, #b0b3ba);
+  flex-shrink: 0;
+}
+
+.gamza-card-product-tag {
+  font-size: 0.78rem;
+  color: var(--seed-gray-700, #868b94);
+  background-color: var(--seed-gray-200, #f3f4f5);
+  padding: 2px 8px;
+  border-radius: 6px;
+  align-self: flex-start;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 180px;
+}
+
+.gamza-card-last-msg {
+  font-size: 0.88rem;
+  color: var(--seed-gray-800, #555d6d);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.gamza-card-last-msg.empty {
+  color: var(--seed-gray-500, #d1d3d8);
+  font-style: italic;
+}
+
+.gamza-card-product-thumb {
+  width: 50px;
+  height: 50px;
+  border-radius: 10px;
+  object-fit: cover;
+  flex-shrink: 0;
+  border: 1px solid var(--seed-gray-300, #eeeff1);
+  background-color: var(--seed-gray-200, #f3f4f5);
+}
+
+.gamza-card-unread-badge {
+  background-color: var(--seed-carrot-600, #ff6600);
+  color: #ffffff;
+  font-size: 0.72rem;
+  font-weight: 700;
+  padding: 2px 7px;
+  border-radius: 12px;
+  min-width: 20px;
+  text-align: center;
+  align-self: flex-start;
+  margin-top: 2px;
+}
+
+/* 대화목록 빈 화면 */
+.gamza-chat-empty-state {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 60px 24px;
+  text-align: center;
+  background-color: var(--seed-gray-00, #ffffff);
+}
+
+.gamza-empty-potato-icon {
+  font-size: 3.6rem;
+  margin-bottom: 16px;
+  animation: potato-bounce 2.2s infinite ease-in-out;
+}
+
+@keyframes potato-bounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
+}
+
+.gamza-empty-title {
+  margin: 0 0 8px;
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--seed-gray-900, #2a3038);
+}
+
+.gamza-empty-desc {
+  margin: 0;
+  font-size: 0.92rem;
+  color: var(--seed-gray-700, #868b94);
+  line-height: 1.55;
+}
+
+.gamza-empty-desc strong {
+  color: var(--seed-carrot-600, #ff6600);
+}
+
+/* ==========================================================================
+   [화면 B] 대화방 화면 스타일
+   ========================================================================== */
+.gamza-chat-room-header {
+  padding: 0 14px;
+}
+
+.gamza-chat-header-left {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+}
+
+.gamza-chat-back-btn {
+  background: none;
+  border: none;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: var(--seed-gray-800, #555d6d);
+  transition: background-color 0.15s ease;
+  flex-shrink: 0;
+}
+
+.gamza-chat-back-btn:hover {
+  background-color: var(--seed-gray-200, #f3f4f5);
+}
+
+.gamza-chat-partner-info {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+}
+
+.gamza-chat-partner-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  object-fit: cover;
+  background-color: var(--seed-carrot-100, #fff2ec);
+  border: 1px solid var(--seed-gray-200, #f3f4f5);
+  flex-shrink: 0;
+}
+
+.gamza-chat-partner-text {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.gamza-chat-partner-name-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.gamza-chat-partner-name {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--seed-gray-1000, #1a1c20);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.gamza-chat-manner-badge {
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: var(--seed-carrot-600, #ff6600);
+  background-color: var(--seed-carrot-100, #fff2ec);
+  padding: 1px 6px;
+  border-radius: 6px;
+  flex-shrink: 0;
+}
+
+.gamza-chat-status-text {
+  font-size: 0.74rem;
+  color: var(--seed-gray-600, #b0b3ba);
+}
+
+/* 상단 상품 정보 요약 바 */
+.gamza-chat-product-bar {
+  background-color: var(--seed-gray-00, #ffffff);
+  border-bottom: 1px solid var(--seed-gray-200, #f3f4f5);
+  padding: 12px 18px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-shrink: 0;
+  cursor: pointer;
+  transition: background-color 0.15s ease;
+}
+
+.gamza-chat-product-bar:hover {
+  background-color: #fafbfc;
+}
+
+.gamza-chat-product-thumb {
+  width: 46px;
+  height: 46px;
+  border-radius: 8px;
+  object-fit: cover;
+  flex-shrink: 0;
+  border: 1px solid var(--seed-gray-300, #eeeff1);
+  background-color: var(--seed-gray-200, #f3f4f5);
+}
+
+.gamza-chat-product-info {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.gamza-chat-product-title-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.gamza-chat-product-status-badge {
+  font-size: 0.7rem;
+  font-weight: 700;
+  padding: 1px 6px;
+  border-radius: 4px;
+  white-space: nowrap;
+}
+
+.gamza-chat-product-status-badge.status-selling {
+  background-color: var(--seed-carrot-100, #fff2ec);
+  color: var(--seed-carrot-600, #ff6600);
+}
+.gamza-chat-product-status-badge.status-reserved {
+  background-color: var(--seed-yellow-100, #fff7de);
+  color: var(--seed-yellow-700, #9b7821);
+}
+.gamza-chat-product-status-badge.status-completed {
+  background-color: var(--seed-gray-300, #eeeff1);
+  color: var(--seed-gray-700, #868b94);
+}
+
+.gamza-chat-product-title {
+  font-size: 0.92rem;
+  font-weight: 600;
+  color: var(--seed-gray-900, #2a3038);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.gamza-chat-product-price {
+  font-size: 0.94rem;
+  font-weight: 700;
+  color: var(--seed-gray-1000, #1a1c20);
+}
+
+.gamza-chat-product-view-btn {
+  background: none;
+  border: 1px solid var(--seed-gray-300, #eeeff1);
+  padding: 6px 10px;
+  border-radius: 6px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--seed-gray-700, #868b94);
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: all 0.15s ease;
+}
+
+.gamza-chat-product-view-btn:hover {
+  background-color: var(--seed-gray-100, #f7f8f9);
+  color: var(--seed-gray-900, #2a3038);
+  border-color: var(--seed-gray-400, #dcdee3);
+}
+
+/* 메시지 타임라인 스크롤 영역 */
+.gamza-chat-messages-scroll {
+  flex: 1;
+  overflow-y: auto;
+  padding: 18px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* 날짜 구분선 */
+.gamza-chat-date-divider {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 6px 0;
+}
+
+.gamza-chat-date-pill {
+  background-color: rgba(0, 0, 0, 0.05);
+  color: var(--seed-gray-700, #868b94);
+  font-size: 0.74rem;
+  padding: 4px 12px;
+  border-radius: 14px;
+  font-weight: 500;
+}
+
+/* 메시지 행 (Incoming & Outgoing) */
+.gamza-msg-row {
+  display: flex;
+  align-items: flex-end;
+  gap: 8px;
+  max-width: 80%;
+}
+
+.gamza-msg-row.incoming {
+  align-self: flex-start;
+}
+
+.gamza-msg-row.outgoing {
+  align-self: flex-end;
+  flex-direction: row-reverse;
+}
+
+.gamza-msg-avatar {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  object-fit: cover;
+  flex-shrink: 0;
+  background-color: var(--seed-carrot-100, #fff2ec);
+  margin-bottom: 2px;
+}
+
+.gamza-msg-content-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.gamza-msg-sender-name {
+  font-size: 0.74rem;
+  color: var(--seed-gray-600, #b0b3ba);
+  margin-left: 2px;
+}
+
+.gamza-msg-bubble-wrap {
+  display: flex;
+  align-items: flex-end;
+  gap: 6px;
+}
+
+.gamza-msg-row.outgoing .gamza-msg-bubble-wrap {
+  flex-direction: row-reverse;
+}
+
+.gamza-msg-bubble {
+  padding: 10px 14px;
+  border-radius: 18px;
+  font-size: 0.94rem;
+  line-height: 1.48;
+  word-break: break-word;
+  white-space: pre-wrap;
+}
+
+.gamza-msg-row.incoming .gamza-msg-bubble {
+  background-color: #ffffff;
+  color: var(--seed-gray-1000, #1a1c20);
+  border-bottom-left-radius: 4px;
+  border: 1px solid var(--seed-gray-200, #f3f4f5);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+}
+
+.gamza-msg-row.outgoing .gamza-msg-bubble {
+  background-color: var(--seed-carrot-600, #ff6600);
+  color: #ffffff;
+  border-bottom-right-radius: 4px;
+  box-shadow: 0 2px 6px rgba(255, 102, 0, 0.22);
+}
+
+.gamza-msg-time {
+  font-size: 0.7rem;
+  color: var(--seed-gray-600, #b0b3ba);
+  flex-shrink: 0;
+}
+
+/* 하단 메시지 입력 폼 */
+.gamza-chat-input-bar {
+  background-color: var(--seed-gray-00, #ffffff);
+  border-top: 1px solid var(--seed-gray-200, #f3f4f5);
+  padding: 12px 16px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-shrink: 0;
+}
+
+.gamza-chat-input {
+  flex: 1;
+  background-color: var(--seed-gray-100, #f7f8f9);
+  border: 1px solid var(--seed-gray-300, #eeeff1);
+  border-radius: 22px;
+  padding: 11px 16px;
+  font-size: 0.94rem;
+  color: var(--seed-gray-1000, #1a1c20);
+  outline: none;
+  font-family: inherit;
+  transition: border-color 0.2s ease, background-color 0.2s ease;
+}
+
+.gamza-chat-input:focus {
+  border-color: var(--seed-carrot-500, #ff9364);
+  background-color: #ffffff;
+  box-shadow: 0 0 0 3px rgba(255, 102, 0, 0.12);
+}
+
+.gamza-chat-send-btn {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  border: none;
+  background-color: var(--seed-carrot-600, #ff6600);
+  color: #ffffff;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: background-color 0.15s ease, transform 0.1s ease;
+}
+
+.gamza-chat-send-btn:hover {
+  background-color: var(--seed-carrot-700, #e14d00);
+  transform: scale(1.04);
+}
+
+.gamza-chat-send-btn:active {
+  transform: scale(0.96);
+}
+
+.gamza-chat-send-btn:disabled {
+  background-color: var(--seed-gray-400, #dcdee3);
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* ==========================================================================
+   반응형 모바일 스타일 (640px 이하)
+   ========================================================================== */
+@media (max-width: 640px) {
+  .gamza-chat-modal-overlay {
+    padding: 0;
+  }
+
+  .gamza-chat-modal-container {
+    width: 100%;
+    height: 100%;
+    max-height: 100vh;
+    border-radius: 0;
+    border: none;
+    box-shadow: none;
+    transform: translateY(100%);
+  }
+
+  .gamza-chat-modal-overlay.is-active .gamza-chat-modal-container {
+    transform: translateY(0);
+  }
+
+  .gamza-msg-row {
+    max-width: 88%;
+  }
+}
