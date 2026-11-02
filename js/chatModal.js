@@ -381,7 +381,7 @@ class GamzaChatController {
     this.renderOptimisticProductBar({
       title: productTitle || product?.title || "상품 정보",
       price: product?.price ?? 0,
-      image_url: product?.image_url,
+      image_url: product?.image_url || product?.image || product?.imageUrl,
       status: product?.status || "selling"
     });
 
@@ -407,6 +407,9 @@ class GamzaChatController {
       });
 
       if (room) {
+        if (!room.product && product) {
+          room.product = product;
+        }
         await this.enterRoom(room);
       }
     } catch (err) {
@@ -452,6 +455,8 @@ class GamzaChatController {
     if (productThumb) {
       productThumb.src =
         prod.image_url ||
+        prod.image ||
+        prod.imageUrl ||
         "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='100' height='100' viewBox='0 0 100 100'><rect width='100' height='100' fill='%23fff2ec'/><text x='50' y='55' font-size='32' text-anchor='middle' dominant-baseline='middle'>🥔</text></svg>";
     }
 

@@ -855,17 +855,18 @@
 
     // 12. 감자톡 채팅 시작하기 이벤트 수신 (상세 모달의 '감자톡 채팅하기' 버튼 클릭)
     window.addEventListener("gamza:start-chat", (e) => {
-      const { productId, productTitle, seller } = e.detail || {};
+      const { productId, productTitle, seller, product } = e.detail || {};
       if (!productId) return;
 
-      console.log(`[감자톡] 채팅방 요청 수신 - 상품 ID: ${productId}`, { productTitle, seller });
+      console.log(`[감자톡] 채팅방 요청 수신 - 상품 ID: ${productId}`, { productTitle, seller, product });
       if (typeof window.closeDetailModal === "function") {
         window.closeDetailModal();
       }
       GamzaChatModal.openChatWithProduct({
         productId,
         productTitle,
-        seller
+        seller,
+        product
       });
     });
 

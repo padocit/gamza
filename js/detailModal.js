@@ -113,31 +113,31 @@
         e.stopPropagation();
         if (!currentProduct) return;
 
+        // 현재 보고 있던 상품 정보를 먼저 복사 보관 (closeDetailModal 호출 시 currentProduct가 null로 초기화됨)
+        const targetProduct = {
+          id: currentProduct.id,
+          title: currentProduct.title,
+          seller: currentProduct.seller,
+          price: currentProduct.price,
+          image: currentProduct.image || currentProduct.imageUrl,
+          status: currentProduct.status
+        };
+
         // 상세 모달 닫기
         closeDetailModal();
 
-        // 커스텀 이벤트 발행
+        // 커스텀 이벤트 발행 (index.html에서 감자톡 모달 오픈)
         const event = new CustomEvent('gamza:start-chat', {
           detail: {
-            productId: currentProduct.id,
-            productTitle: currentProduct.title,
-            seller: currentProduct.seller,
-            product: currentProduct
+            productId: targetProduct.id,
+            productTitle: targetProduct.title,
+            seller: targetProduct.seller,
+            product: targetProduct
           }
         });
         window.dispatchEvent(event);
 
-        // 전역 함수 직접 호출도 지원
-        if (typeof window.openChatRoom === "function") {
-          window.openChatRoom({
-            productId: currentProduct.id,
-            productTitle: currentProduct.title,
-            seller: currentProduct.seller,
-            product: currentProduct
-          });
-        }
-
-        console.log(`[감자톡] '${currentProduct.title}' 판매자(${currentProduct.seller?.nickname || '판매자'})와의 채팅을 시작합니다.`);
+        console.log(`[감자톡] '${targetProduct.title}' 판매자(${targetProduct.seller?.nickname || '판매자'})와의 채팅을 시작합니다.`);
       });
     }
 
